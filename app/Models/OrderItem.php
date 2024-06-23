@@ -12,7 +12,14 @@ class OrderItem extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = 'order_items';
-    protected $fillable = ['order_id', 'item_id', 'quantity', 'unit_amount', 'total_amount'];
+
+    protected $fillable = [
+        'order_id',
+        'item_id',
+        'quantity',
+        'unit_amount',
+        'total_amount',
+    ];
 
     public function order(): BelongsTo
     {

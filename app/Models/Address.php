@@ -13,7 +13,16 @@ class Address extends Model
 
     protected $table = 'addresses';
 
-    protected $fillable = ['f_name', 'l_name', 'phone', 'email', 'street', 'city', 'country', 'zip_code'];
+    protected $fillable = [
+        'f_name',
+        'l_name',
+        'phone',
+        'email',
+        'street',
+        'city',
+        'country',
+        'zip_code'
+    ];
 
     public function order(): BelongsTo
     {
