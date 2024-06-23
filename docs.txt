@@ -1,0 +1,12 @@
+Install Filament:
+-----------------
+composer require filament/filament -W
+php artisan filament:install --panels
+php artisan make:filament-user
+=================================================
+
+Clear Cache Filament Components & Icons:
+---------------------------------------
+php artisan icons:cache
+php artisan filament:cache-components
+php artisan filament:clear-cached-components
