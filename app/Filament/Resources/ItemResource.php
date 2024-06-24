@@ -33,6 +33,7 @@ use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ItemResource extends Resource
@@ -188,7 +189,11 @@ class ItemResource extends Resource
                     EditAction::make(),
                     DeleteAction::make(),
                     RestoreAction::make(),
-                    ForceDeleteAction::make(),
+                    ForceDeleteAction::make()->after(function (Item $record) {
+                        if ($record->images) {
+                           foreach ($record->images as $img) Storage::disk('public')->delete($img);
+                        }
+                     }),
                 ])
             ])
             ->bulkActions([
