@@ -62,7 +62,7 @@ class ItemResource extends Resource
                         ->placeholder('Slug'),
 
                     TextInput::make('price')
-                        ->prefix('INR')
+                        ->prefix('EG')
                         ->required()
                         ->placeholder('Price'),
                 ])->columnSpan(1),
