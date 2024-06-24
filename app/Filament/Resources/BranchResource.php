@@ -20,9 +20,14 @@ use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\ForceDeleteAction;
+use Filament\Tables\Actions\ForceDeleteBulkAction;
+use Filament\Tables\Actions\RestoreAction;
+use Filament\Tables\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -32,7 +37,7 @@ class BranchResource extends Resource
 {
     protected static ?string $model = Branch::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-map';
 
     public static function form(Form $form): Form
     {
@@ -42,7 +47,7 @@ class BranchResource extends Resource
                     ->maxLength(255)
                     ->required()
                     ->live(onBlur: true)
-                    ->afterStateUpdated(fn(string $operation, $state, Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null)
+                    ->afterStateUpdated(fn(Set $set, $state) =>  $set('slug', Str::slug($state)))
                     ->placeholder('Name'),
 
                 TextInput::make('slug')
@@ -55,7 +60,11 @@ class BranchResource extends Resource
 
                 FileUpload::make('image')
                     ->image()
-                    ->directory('branches'),
+                    ->imageEditor()
+                    ->minSize(1)
+                    ->maxSize(1024)
+                    ->directory('branches')
+                    ->columnSpanFull(),
 
                 Toggle::make('is_active')
                     ->required()
@@ -69,16 +78,20 @@ class BranchResource extends Resource
             ->columns([
                 TextColumn::make('name')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(),
 
                 TextColumn::make('slug')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(),
 
-                ImageColumn::make('image'),
+                ImageColumn::make('image')
+                    ->toggleable(),
 
                 IconColumn::make('is_active')
-                    ->boolean(),
+                    ->boolean()
+                    ->toggleable(),
 
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -91,18 +104,22 @@ class BranchResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                TrashedFilter::make(),
             ])
             ->actions([
                 ActionGroup::make([
                     ViewAction::make(),
                     EditAction::make(),
                     DeleteAction::make(),
+                    RestoreAction::make(),
+                    ForceDeleteAction::make(),
                 ])
             ])
             ->bulkActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    RestoreBulkAction::make(),
+                    ForceDeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -112,5 +129,13 @@ class BranchResource extends Resource
         return [
             'index' => ManageBranches::route('/'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }

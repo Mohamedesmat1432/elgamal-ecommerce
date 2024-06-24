@@ -8,6 +8,7 @@ use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
@@ -20,7 +21,12 @@ use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\ForceDeleteAction;
+use Filament\Tables\Actions\ForceDeleteBulkAction;
+use Filament\Tables\Actions\RestoreAction;
+use Filament\Tables\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -57,6 +63,12 @@ class UserResource extends Resource
                     ->dehydrated(fn($state) => filled($state))
                     ->required(fn(Page $livewire): bool => $livewire instanceof CreateRecord)
                     ->placeholder('Password'),
+
+                Select::make('roles')
+                    ->relationship('roles', 'name')
+                    ->multiple()
+                    ->preload()
+                    ->searchable()
             ]);
     }
 
@@ -66,11 +78,13 @@ class UserResource extends Resource
             ->columns([
                 TextColumn::make('name')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(),
 
                 TextColumn::make('email')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(),
 
                 TextColumn::make('email_verified_at')
                     ->dateTime()
@@ -83,18 +97,22 @@ class UserResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                TrashedFilter::make(),
             ])
             ->actions([
                 ActionGroup::make([
                     ViewAction::make(),
                     EditAction::make(),
                     DeleteAction::make(),
+                    RestoreAction::make(),
+                    ForceDeleteAction::make(),
                 ])
             ])
             ->bulkActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    RestoreBulkAction::make(),
+                    ForceDeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -105,4 +123,13 @@ class UserResource extends Resource
             'index' => ManageUsers::route('/'),
         ];
     }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
+    }
+
 }
