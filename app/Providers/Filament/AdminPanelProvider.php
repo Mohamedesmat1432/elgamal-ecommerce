@@ -74,6 +74,7 @@ class AdminPanelProvider extends PanelProvider
                         'sm' => 2,
                     ]),
             ])
+            ->sidebarCollapsibleOnDesktop()
             ->spa();
     }
 }

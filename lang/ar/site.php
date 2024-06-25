@@ -27,4 +27,8 @@ return [
     'in_stock' => 'موجود',
     'created_at' => 'تاريخ الانشاء',
     'updated_at' => 'تاريخ التعديل',
+    'item_info' => 'معلومات الصنف',
+    'item_content' => 'محتوي الصنف',
+    'item_relational' => 'اﻷرتباطات',
+    'item_status' => 'الحالات',
 ];

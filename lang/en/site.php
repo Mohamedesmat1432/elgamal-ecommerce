@@ -12,7 +12,6 @@ return [
     'category' => 'Category',
     'brand' => 'Brand',
     'branch' => 'Branch',
-    'user' => 'user',
     'name' => 'Name',
     'slug' => 'Slug',
     'email' => 'ُEmail Address',
@@ -28,4 +27,8 @@ return [
     'in_stock' => 'In Stock',
     'created_at' => 'Created At',
     'updated_at' => 'Updated At',
+    'item_info' => 'Item Information',
+    'item_content' => 'Item Content',
+    'item_relational' => 'Relational',
+    'item_status' => 'Status',
 ];

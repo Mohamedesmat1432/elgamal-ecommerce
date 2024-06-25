@@ -119,7 +119,7 @@ class CategoryResource extends Resource
                 ActionGroup::make([
                     ViewAction::make(),
                     EditAction::make()->before(function ($record, $data) {
-                        if ($record->image && $record->image !== $data['image']) {
+                        if ($data['image'] !== $record->image) {
                             Storage::disk('public')->delete($record->image);
                         }
 

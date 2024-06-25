@@ -6,6 +6,7 @@ use App\Filament\Resources\ItemResource\Pages\ManageItems;
 use App\Filament\Resources\ItemResource\RelationManagers;
 use App\Models\Item;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -14,6 +15,8 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action;
+
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
@@ -26,6 +29,7 @@ use Filament\Tables\Actions\RestoreBulkAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -43,7 +47,7 @@ class ItemResource extends Resource
     {
         return $form
             ->schema([
-                Section::make('Item Info')->schema([
+                Section::make(__('site.item_info'))->schema([
                     TextInput::make('name')
                         ->label(__('site.name'))
                         ->placeholder(__('site.name'))
@@ -64,12 +68,29 @@ class ItemResource extends Resource
                     TextInput::make('price')
                         ->label(__('site.price'))
                         ->placeholder(__('site.price'))
+                        ->numeric() 
+                        ->minValue(1)
                         ->prefix('EG')
                         ->required(),
-                ])->columnSpan(1),
+                ])->columnSpan(6),
 
-                Section::make('Item toggle')->schema([
-                    Toggle::make('is_active')
+                Section::make(__('site.item_relational'))->schema([
+                    Select::make('category_id')
+                        ->label(__('site.category'))
+                        ->relationship('category', 'name')
+                        ->required()
+                        ->preload()
+                        ->searchable(),
+
+                    Select::make('brand_id')
+                        ->label(__('site.brand'))
+                        ->relationship('brand', 'name')
+                        ->required()
+                        ->preload()
+                        ->searchable(),
+
+                    Group::make([
+                        Toggle::make('is_active')
                         ->label(__('site.is_active'))
                         ->required()
                         ->default(true),
@@ -88,15 +109,14 @@ class ItemResource extends Resource
                         ->label(__('site.on_sale'))
                         ->required()
                         ->default(false),
-                ])->columnSpan(1),
-
-                Section::make('Item content')->schema([
+                    ])->columns(2)
+                ])->columnSpan(6),
+    
+                Section::make(__('site.item_content'))->schema([
                     MarkdownEditor::make('description')
                         ->label(__('site.description'))
-                        ->placeholder(__('site.description'))
                         ->required()
-                        ->fileAttachmentsDirectory('items')
-                        ->columnSpanFull(),
+                        ->fileAttachmentsDirectory('items'),
 
                     FileUpload::make('images')
                         ->label(__('site.images'))
@@ -107,27 +127,10 @@ class ItemResource extends Resource
                         ->directory('items')
                         ->minSize(1)
                         ->maxSize(2024)
-                        ->maxFiles(5)
-                        ->columnSpanFull(),
-                ])->columnSpan(1),
+                        ->maxFiles(5),
+                ])->columns(2)->columnSpan(12),
 
-                Section::make('Relation Items')->schema([
-                    Select::make('category_id')
-                        ->label(__('site.category'))
-                        ->relationship('category', 'name')
-                        ->required()
-                        ->preload()
-                        ->searchable(),
-
-                    Select::make('brand_id')
-                        ->label(__('site.brand'))
-                        ->relationship('brand', 'name')
-                        ->required()
-                        ->preload()
-                        ->searchable()
-                ])->columnSpan(1),
-
-            ]);
+            ])->columns(12);
     }
 
     public static function table(Table $table): Table
@@ -204,22 +207,31 @@ class ItemResource extends Resource
             ])
             ->filters([
                 TrashedFilter::make(),
+
+                SelectFilter::make('category_id')
+                    ->label(__('site.category'))
+                    ->relationship('category', 'name')
+                    ->preload()
+                    ->searchable(),
+
+                SelectFilter::make('brand_id')
+                    ->label(__('site.brand'))
+                    ->relationship('brand', 'name')
+                    ->preload()
+                    ->searchable(),
             ])
             ->actions([
-                ActionGroup::make([
+                // ActionGroup::make([
                     ViewAction::make(),
-                    EditAction::make()->before(function ($record, $data) {
-                        if (isset($record->images) && $record->images !== $data['images']) {
-                            foreach ($record->images as $key =>  $image) {
-                                if(isset($data['images'][$key]) && $record->images[$key] !== $data['images'][$key]) {
-                                    Storage::disk('public')->delete($image);
-                                }
-                            }
-                        }else{
-                            $record->images = $data['images'];
+                    EditAction::make()
+                    // ->visible(function ($record) {
+                    //     return!$record->trashed();
+                    // })
+                    ->before(function ($record, $data) {
+                        $imagesToRemove = array_diff($record->images, $data['images']);
+                        foreach ($imagesToRemove as $image) {
+                            Storage::disk('public')->delete($image);
                         }
-
-                        $data['images'] = $record->images;
                     }),
                     DeleteAction::make(),
                     RestoreAction::make(),
@@ -228,7 +240,7 @@ class ItemResource extends Resource
                            foreach ($record->images as $image) Storage::disk('public')->delete($image);
                         }
                     }),
-                ])
+                // ])
             ])
             ->bulkActions([
                 BulkActionGroup::make([
@@ -236,7 +248,12 @@ class ItemResource extends Resource
                     RestoreBulkAction::make(),
                     ForceDeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->reorderRecordsTriggerAction(
+                fn (Action $action, bool $isReordering) => $action
+                    ->button()
+                    ->label($isReordering ? 'Disable reordering' : 'Enable reordering'),
+            );
     }
 
     public static function getPages(): array
