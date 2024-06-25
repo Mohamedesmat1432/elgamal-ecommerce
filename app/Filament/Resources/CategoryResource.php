@@ -2,18 +2,15 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CategoryResource\Pages;
 use App\Filament\Resources\CategoryResource\Pages\ManageCategories;
 use App\Filament\Resources\CategoryResource\RelationManagers;
 use App\Models\Category;
-use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\ActionGroup;
@@ -31,6 +28,7 @@ use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CategoryResource extends Resource
@@ -44,21 +42,24 @@ class CategoryResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')
+                    ->label(__('site.name'))
+                    ->placeholder(__('site.name'))
                     ->maxLength(255)
                     ->required()
                     ->live(onBlur: true)
-                    ->afterStateUpdated(fn(Set $set, $state) =>  $set('slug', Str::slug($state)))
-                    ->placeholder('Name'),
+                    ->afterStateUpdated(fn(Set $set, $state) =>  $set('slug', Str::slug($state))),
 
                 TextInput::make('slug')
+                    ->label(__('site.slug'))
+                    ->placeholder(__('site.slug'))
                     ->maxLength(255)
                     ->disabled()
                     ->required()
                     ->dehydrated()
-                    ->unique(Category::class, 'slug', ignoreRecord: true)
-                    ->placeholder('Slug'),
+                    ->unique(Category::class, 'slug', ignoreRecord: true),
 
                 FileUpload::make('image')
+                    ->label(__('site.image'))
                     ->image()
                     ->imageEditor()
                     ->minSize(1)
@@ -67,6 +68,7 @@ class CategoryResource extends Resource
                     ->columnSpanFull(),
 
                 Toggle::make('is_active')
+                    ->label(__('site.is_active'))
                     ->required()
                     ->default(true),
             ]);
@@ -77,27 +79,35 @@ class CategoryResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label(__('site.name'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
 
                 TextColumn::make('slug')
+                    ->label(__('site.slug'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
 
-                ImageColumn::make('image'),
+                ImageColumn::make('image')
+                    ->label(__('site.image'))
+                    ->sortable()
+                    ->toggleable(),
 
                 IconColumn::make('is_active')
+                    ->label(__('site.is_active'))
                     ->boolean()
                     ->toggleable(),
 
                 TextColumn::make('created_at')
+                    ->label(__('site.created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('updated_at')
+                    ->label(__('site.updated_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -108,10 +118,20 @@ class CategoryResource extends Resource
             ->actions([
                 ActionGroup::make([
                     ViewAction::make(),
-                    EditAction::make(),
+                    EditAction::make()->before(function ($record, $data) {
+                        if ($record->image && $record->image !== $data['image']) {
+                            Storage::disk('public')->delete($record->image);
+                        }
+
+                        $data['image'] = $record->image;
+                    }),
                     DeleteAction::make(),
                     RestoreAction::make(),
-                    ForceDeleteAction::make(),
+                    ForceDeleteAction::make()->after(function ($record) {
+                        if ($record->image) {
+                            Storage::disk('public')->delete($record->image);
+                        }
+                    }),
                 ])
             ])
             ->bulkActions([
@@ -136,5 +156,30 @@ class CategoryResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('site.categories');
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getEloquentQuery()->count();
+    }
+
+    public static function getLabel(): string
+    {
+        return __('site.categories');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('site.category');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('site.categories');
     }
 }

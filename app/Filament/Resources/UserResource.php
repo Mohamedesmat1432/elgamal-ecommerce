@@ -2,11 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\Pages\ManageUsers;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
-use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -14,7 +12,6 @@ use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\ActionGroup;
@@ -42,34 +39,39 @@ class UserResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')
-                    ->required()
-                    ->placeholder('Name'),
+                    ->label(__('site.name'))
+                    ->placeholder(__('site.name'))
+                    ->required(),
 
                 TextInput::make('email')
+                    ->label(__('site.email'))
+                    ->placeholder(__('site.email'))
                     ->required()
-                    ->label('Email Address')
                     ->email()
-                    ->unique(User::class, 'email', ignoreRecord:true)
-                    ->placeholder('Email'),
+                    ->unique(User::class, 'email', ignoreRecord:true),
 
                 DateTimePicker::make('email_verified_at')
+                    ->label(__('site.email_verified_at'))
+                    ->placeholder(__('site.email_verified_at'))
                     ->required()
-                    ->label('Email Verified')
-                    ->default(now())
-                    ->placeholder('Email Verified'),
+                    ->date()
+                    ->default(now()),
 
                 TextInput::make('password')
+                    ->label(__('site.password'))
+                    ->placeholder(__('site.password'))
                     ->password()
                     ->dehydrated(fn($state) => filled($state))
-                    ->required(fn(Page $livewire): bool => $livewire instanceof CreateRecord)
-                    ->placeholder('Password'),
+                    ->required(fn(Page $livewire): bool => $livewire instanceof CreateRecord),
 
                 Select::make('roles')
+                    ->label(__('site.roles'))
+                    ->placeholder(__('site.roles'))
                     ->relationship('roles', 'name')
                     ->required()
                     ->multiple()
                     ->preload()
-                    ->searchable()
+                    ->searchable(),
             ]);
     }
 
@@ -78,26 +80,31 @@ class UserResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label(__('site.name'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
 
                 TextColumn::make('email')
+                    ->label(__('site.email'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
 
                 TextColumn::make('email_verified_at')
+                    ->label(__('site.email_verified_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('created_at')
+                    ->label(__('site.created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('updated_at')
+                    ->label(__('site.updated_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -138,4 +145,33 @@ class UserResource extends Resource
             ]);
     }
 
+    public static function getNavigationGroup(): ?string
+    {
+        return __('filament-shield::filament-shield.nav.group');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('site.users');
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getEloquentQuery()->count();
+    }
+
+    public static function getLabel(): string
+    {
+        return __('site.users');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('site.user');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('site.users');
+    }
 }

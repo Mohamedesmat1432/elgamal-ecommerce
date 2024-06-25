@@ -2,18 +2,15 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BranchResource\Pages;
 use App\Filament\Resources\BranchResource\Pages\ManageBranches;
 use App\Filament\Resources\BranchResource\RelationManagers;
 use App\Models\Branch;
-use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\ActionGroup;
@@ -31,6 +28,7 @@ use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class BranchResource extends Resource
@@ -109,10 +107,20 @@ class BranchResource extends Resource
             ->actions([
                 ActionGroup::make([
                     ViewAction::make(),
-                    EditAction::make(),
+                    EditAction::make()->before(function ($record, $data) {
+                        if ($record->image && $record->image !== $data['image']) {
+                            Storage::disk('public')->delete($record->image);
+                        }
+
+                        $data['image'] = $record->image;
+                    }),
                     DeleteAction::make(),
                     RestoreAction::make(),
-                    ForceDeleteAction::make(),
+                    ForceDeleteAction::make()->after(function ($record) {
+                        if ($record->image) {
+                            Storage::disk('public')->delete($record->image);
+                        }
+                    }),
                 ])
             ])
             ->bulkActions([
@@ -138,4 +146,31 @@ class BranchResource extends Resource
                 SoftDeletingScope::class,
             ]);
     }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('site.branches');
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getEloquentQuery()->count();
+    }
+
+    public static function getLabel(): string
+    {
+        return __('site.branches');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('site.branch');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('site.branches');
+    }
+
+
 }

@@ -2,11 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ItemResource\Pages;
 use App\Filament\Resources\ItemResource\Pages\ManageItems;
 use App\Filament\Resources\ItemResource\RelationManagers;
 use App\Models\Item;
-use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Section;
@@ -16,7 +14,6 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
@@ -48,69 +45,82 @@ class ItemResource extends Resource
             ->schema([
                 Section::make('Item Info')->schema([
                     TextInput::make('name')
+                        ->label(__('site.name'))
+                        ->placeholder(__('site.name'))
                         ->maxLength(255)
                         ->required()
                         ->live(onBlur: true)
-                        ->afterStateUpdated(fn(Set $set, $state) =>  $set('slug', Str::slug($state)))
-                        ->placeholder('Name'),
+                        ->afterStateUpdated(fn(Set $set, $state) =>  $set('slug', Str::slug($state))),
 
                     TextInput::make('slug')
+                        ->label(__('site.slug'))
+                        ->placeholder(__('site.slug'))
                         ->maxLength(255)
                         ->disabled()
                         ->required()
                         ->dehydrated()
-                        ->unique(Item::class, 'slug', ignoreRecord: true)
-                        ->placeholder('Slug'),
+                        ->unique(Item::class, 'slug', ignoreRecord: true),
 
                     TextInput::make('price')
+                        ->label(__('site.price'))
+                        ->placeholder(__('site.price'))
                         ->prefix('EG')
-                        ->required()
-                        ->placeholder('Price'),
+                        ->required(),
                 ])->columnSpan(1),
 
                 Section::make('Item toggle')->schema([
                     Toggle::make('is_active')
+                        ->label(__('site.is_active'))
                         ->required()
                         ->default(true),
 
                     Toggle::make('in_stock')
+                        ->label(__('site.in_stock'))
                         ->required()
                         ->default(true),
 
                     Toggle::make('is_featured')
+                        ->label(__('site.is_featured'))
                         ->required()
                         ->default(false),
 
                     Toggle::make('on_sale')
+                        ->label(__('site.on_sale'))
                         ->required()
                         ->default(false),
                 ])->columnSpan(1),
 
                 Section::make('Item content')->schema([
                     MarkdownEditor::make('description')
+                        ->label(__('site.description'))
+                        ->placeholder(__('site.description'))
                         ->required()
                         ->fileAttachmentsDirectory('items')
-                        ->placeholder('Description')
                         ->columnSpanFull(),
 
                     FileUpload::make('images')
+                        ->label(__('site.images'))
                         ->multiple()
                         ->image()
+                        ->reorderable()
                         ->imageEditor()
-                        ->minSize(1)
-                        ->maxSize(1024)
                         ->directory('items')
+                        ->minSize(1)
+                        ->maxSize(2024)
+                        ->maxFiles(5)
                         ->columnSpanFull(),
                 ])->columnSpan(1),
 
                 Section::make('Relation Items')->schema([
                     Select::make('category_id')
+                        ->label(__('site.category'))
                         ->relationship('category', 'name')
                         ->required()
                         ->preload()
                         ->searchable(),
 
                     Select::make('brand_id')
+                        ->label(__('site.brand'))
                         ->relationship('brand', 'name')
                         ->required()
                         ->preload()
@@ -125,56 +135,68 @@ class ItemResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label(__('site.name'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
 
                 TextColumn::make('slug')
+                    ->label(__('site.slug'))
+                    ->placeholder(__('site.slug'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
 
                 TextColumn::make('price')
+                    ->label(__('site.price'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
 
                 TextColumn::make('category.name')
+                    ->label(__('site.category'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
 
                 TextColumn::make('brand.name')
+                    ->label(__('site.brand'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
 
                 IconColumn::make('is_active')
+                    ->label(__('site.is_active'))
                     ->boolean()
                     ->sortable()
                     ->toggleable(),
 
                 IconColumn::make('in_stock')
+                    ->label(__('site.in_stock'))
                     ->boolean()
                     ->sortable()
                     ->toggleable(),
 
                 IconColumn::make('is_featured')
+                    ->label(__('site.is_featured'))
                     ->boolean()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 IconColumn::make('on_sale')
+                    ->label(__('site.on_sale'))
                     ->boolean()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('created_at')
+                    ->label(__('site.created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('updated_at')
+                    ->label(__('site.updated_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -186,14 +208,26 @@ class ItemResource extends Resource
             ->actions([
                 ActionGroup::make([
                     ViewAction::make(),
-                    EditAction::make(),
+                    EditAction::make()->before(function ($record, $data) {
+                        if (isset($record->images) && $record->images !== $data['images']) {
+                            foreach ($record->images as $key =>  $image) {
+                                if(isset($data['images'][$key]) && $record->images[$key] !== $data['images'][$key]) {
+                                    Storage::disk('public')->delete($image);
+                                }
+                            }
+                        }else{
+                            $record->images = $data['images'];
+                        }
+
+                        $data['images'] = $record->images;
+                    }),
                     DeleteAction::make(),
                     RestoreAction::make(),
-                    ForceDeleteAction::make()->after(function (Item $record) {
+                    ForceDeleteAction::make()->after(function ($record) {
                         if ($record->images) {
-                           foreach ($record->images as $img) Storage::disk('public')->delete($img);
+                           foreach ($record->images as $image) Storage::disk('public')->delete($image);
                         }
-                     }),
+                    }),
                 ])
             ])
             ->bulkActions([
@@ -218,5 +252,30 @@ class ItemResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('site.items');
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getEloquentQuery()->count();
+    }
+
+    public static function getLabel(): string
+    {
+        return __('site.items');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('site.item');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('site.items');
     }
 }

@@ -2,18 +2,15 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BrandResource\Pages;
 use App\Filament\Resources\BrandResource\Pages\ManageBrands;
 use App\Filament\Resources\BrandResource\RelationManagers;
 use App\Models\Brand;
-use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\ActionGroup;
@@ -31,6 +28,7 @@ use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class BrandResource extends Resource
@@ -109,10 +107,20 @@ class BrandResource extends Resource
             ->actions([
                 ActionGroup::make([
                     ViewAction::make(),
-                    EditAction::make(),
+                    EditAction::make()->before(function ($record, $data) {
+                        if ($record->image && $record->image !== $data['image']) {
+                            Storage::disk('public')->delete($record->image);
+                        }
+
+                        $data['image'] = $record->image;
+                    }),
                     DeleteAction::make(),
                     RestoreAction::make(),
-                    ForceDeleteAction::make(),
+                    ForceDeleteAction::make()->after(function ($record) {
+                        if ($record->image) {
+                            Storage::disk('public')->delete($record->image);
+                        }
+                    }),
                 ])
             ])
             ->bulkActions([
@@ -137,5 +145,30 @@ class BrandResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('site.brands');
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getEloquentQuery()->count();
+    }
+
+    public static function getLabel(): string
+    {
+        return __('site.brands');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('site.brand');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('site.brands');
     }
 }
