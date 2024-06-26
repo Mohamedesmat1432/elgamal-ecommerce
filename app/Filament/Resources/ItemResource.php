@@ -28,6 +28,7 @@ use Filament\Tables\Actions\RestoreAction;
 use Filament\Tables\Actions\RestoreBulkAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
@@ -41,7 +42,7 @@ class ItemResource extends Resource
 {
     protected static ?string $model = Item::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
 
     public static function form(Form $form): Form
     {
@@ -68,7 +69,7 @@ class ItemResource extends Resource
                     TextInput::make('price')
                         ->label(__('site.price'))
                         ->placeholder(__('site.price'))
-                        ->numeric() 
+                        ->numeric()
                         ->minValue(1)
                         ->prefix('EG')
                         ->required(),
@@ -111,7 +112,7 @@ class ItemResource extends Resource
                         ->default(false),
                     ])->columns(2)
                 ])->columnSpan(6),
-    
+
                 Section::make(__('site.item_content'))->schema([
                     MarkdownEditor::make('description')
                         ->label(__('site.description'))
@@ -145,8 +146,14 @@ class ItemResource extends Resource
 
                 TextColumn::make('slug')
                     ->label(__('site.slug'))
-                    ->placeholder(__('site.slug'))
                     ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                ImageColumn::make('images')
+                    ->label(__('site.images'))
+                    ->circular()
+                    ->stacked()
                     ->sortable()
                     ->toggleable(),
 
@@ -184,13 +191,13 @@ class ItemResource extends Resource
                     ->label(__('site.is_featured'))
                     ->boolean()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(),
 
                 IconColumn::make('on_sale')
                     ->label(__('site.on_sale'))
                     ->boolean()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(),
 
                 TextColumn::make('created_at')
                     ->label(__('site.created_at'))
@@ -221,26 +228,32 @@ class ItemResource extends Resource
                     ->searchable(),
             ])
             ->actions([
-                // ActionGroup::make([
-                    ViewAction::make(),
+                ActionGroup::make([
+                    ViewAction::make()
+                        ->visible(function ($record) {
+                            return!$record->trashed();
+                        }),
+
                     EditAction::make()
-                    // ->visible(function ($record) {
-                    //     return!$record->trashed();
-                    // })
-                    ->before(function ($record, $data) {
-                        $imagesToRemove = array_diff($record->images, $data['images']);
-                        foreach ($imagesToRemove as $image) {
-                            Storage::disk('public')->delete($image);
-                        }
-                    }),
+                        ->color('primary')
+                        ->visible(function ($record) {
+                            return!$record->trashed();
+                        })->before(function ($record, $data) {
+                            $imagesToRemove = array_diff($record->images, $data['images']);
+                            foreach ($imagesToRemove as $image) {
+                                Storage::disk('public')->delete($image);
+                            }
+                        }),
+
                     DeleteAction::make(),
                     RestoreAction::make(),
-                    ForceDeleteAction::make()->after(function ($record) {
-                        if ($record->images) {
-                           foreach ($record->images as $image) Storage::disk('public')->delete($image);
-                        }
-                    }),
-                // ])
+                    ForceDeleteAction::make()
+                        ->after(function ($record) {
+                            if ($record->images) {
+                                foreach ($record->images as $image) Storage::disk('public')->delete($image);
+                            }
+                        }),
+                ])
             ])
             ->bulkActions([
                 BulkActionGroup::make([
@@ -248,12 +261,7 @@ class ItemResource extends Resource
                     RestoreBulkAction::make(),
                     ForceDeleteBulkAction::make(),
                 ]),
-            ])
-            ->reorderRecordsTriggerAction(
-                fn (Action $action, bool $isReordering) => $action
-                    ->button()
-                    ->label($isReordering ? 'Disable reordering' : 'Enable reordering'),
-            );
+            ]);
     }
 
     public static function getPages(): array

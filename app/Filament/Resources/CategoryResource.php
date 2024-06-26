@@ -118,27 +118,40 @@ class CategoryResource extends Resource
             ->actions([
                 ActionGroup::make([
                     ViewAction::make(),
-                    EditAction::make()->before(function ($record, $data) {
-                        if ($data['image'] !== $record->image) {
-                            Storage::disk('public')->delete($record->image);
-                        }
-
-                        $data['image'] = $record->image;
-                    }),
+                    EditAction::make()
+                        ->color('primary')
+                        ->visible(function ($record) {
+                            return!$record->trashed();
+                        })
+                        ->before(function ($record, $data) {
+                            if (isset($record->image) && $data['image'] !== $record->image) {
+                                Storage::disk('public')->delete($record->image);
+                            }
+                        }),
                     DeleteAction::make(),
-                    RestoreAction::make(),
-                    ForceDeleteAction::make()->after(function ($record) {
-                        if ($record->image) {
-                            Storage::disk('public')->delete($record->image);
-                        }
-                    }),
+                    RestoreAction::make()
+                        ->color('primary'),
+                    ForceDeleteAction::make()
+                        ->after(function ($record) {
+                            if ($record->image) {
+                                Storage::disk('public')->delete($record->image);
+                            }
+                        }),
                 ])
             ])
             ->bulkActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
-                    RestoreBulkAction::make(),
-                    ForceDeleteBulkAction::make(),
+                    RestoreBulkAction::make()
+                        ->color('primary'),
+                    ForceDeleteBulkAction::make()
+                        ->after(function ($records) {
+                            foreach ($records as $record) {
+                                if ($record->image) {
+                                    Storage::disk('public')->delete($record->image);
+                                }
+                            }
+                        }),
                 ]),
             ]);
     }
