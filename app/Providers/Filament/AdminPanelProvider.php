@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Resources\ItemResource\Widgets\ItemsOverview;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+use Filament\FontProviders\LocalFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -26,9 +27,14 @@ class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->default()
-            ->id('admin')
-            ->path('admin')
+        ->default()
+        ->id('admin')
+        ->path('admin')
+        ->font('Inter', url: asset('css/site.css'), provider: LocalFontProvider::class)
+            ->favicon(asset('images/logo-camel.png'))
+            ->brandName(__('site.elgamal'))
+            ->brandLogo(asset('images/brand-logo-camel-removebg-preview.png'))
+            ->brandLogoHeight('3rem')
             ->login()
             ->colors([
                 'primary' => Color::Amber,

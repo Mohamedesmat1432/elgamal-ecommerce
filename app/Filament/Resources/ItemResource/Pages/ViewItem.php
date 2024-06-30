@@ -3,17 +3,17 @@
 namespace App\Filament\Resources\ItemResource\Pages;
 
 use App\Filament\Resources\ItemResource;
-use Filament\Actions\CreateAction;
-use Filament\Resources\Pages\ManageRecords;
+use Filament\Actions\DeleteAction;
+use Filament\Resources\Pages\ViewRecord;
 
-class ManageItems extends ManageRecords
+class ViewItem extends ViewRecord
 {
     protected static string $resource = ItemResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            // DeleteAction::make(),
         ];
     }
 }

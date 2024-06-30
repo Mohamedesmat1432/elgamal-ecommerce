@@ -2,7 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BrandResource\Pages\ManageBrands;
+use App\Filament\Resources\BrandResource\Pages\CreateBrand;
+use App\Filament\Resources\BrandResource\Pages\EditBrand;
+use App\Filament\Resources\BrandResource\Pages\ListBrands;
+use App\Filament\Resources\BrandResource\Pages\ViewBrand;
 use App\Filament\Resources\BrandResource\RelationManagers;
 use App\Models\Brand;
 use Filament\Forms\Components\FileUpload;
@@ -147,7 +150,10 @@ class BrandResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ManageBrands::route('/'),
+            'index' => ListBrands::route('/'),
+            'create' => CreateBrand::route('/create'),
+            // 'view' => ViewBrand::route('/{record}'),
+            'edit' => EditBrand::route('/{record}/edit'),
         ];
     }
 

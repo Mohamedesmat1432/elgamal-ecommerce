@@ -2,7 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\OrderResource\Pages\ManageOrders;
+use App\Filament\Resources\OrderResource\Pages\CreateOrder;
+use App\Filament\Resources\OrderResource\Pages\EditOrder;
+use App\Filament\Resources\OrderResource\Pages\ListOrders;
+use App\Filament\Resources\OrderResource\Pages\ViewOrder;
 use App\Filament\Resources\OrderResource\RelationManagers\AddressRelationManager;
 use App\Models\Item;
 use App\Models\Order;
@@ -71,10 +74,13 @@ class OrderResource extends Resource
                             'paid' => __('site.paid'),
                             'faild' => __('site.faild'),
                         ])
-                        ->columnSpan(6)
                         ->default('pending')
                         ->required()
-                        ->searchable(),
+                        ->searchable()
+                        ->columnSpan([
+                            'md' => '4',
+                            'sm' => '6'
+                        ]),
                     
                     
                     Select::make('currency')
@@ -85,9 +91,13 @@ class OrderResource extends Resource
                             'eg' => 'EG',
                             'eur' => 'EUR',
                         ])
-                        ->columnSpan(6)
                         ->default('usd')
-                        ->required(),
+                        ->required()
+                        ->searchable()
+                        ->columnSpan([
+                            'md' => '4',
+                            'sm' => '6'
+                        ]),
 
                     Select::make('shipping_method')
                         ->label(__('site.shipping_method'))
@@ -97,10 +107,13 @@ class OrderResource extends Resource
                             'usps' =>'USPS',
                             'hdl' => 'HDL',
                         ])
-                        ->columnSpan(6)
                         ->default('fedex')
                         ->required()
-                        ->searchable(),
+                        ->searchable()
+                        ->columnSpan([
+                            'md' => '4',
+                            'sm' => '6'
+                        ]),
 
                     ToggleButtons::make('status')
                         ->label(__('site.status'))
@@ -127,11 +140,17 @@ class OrderResource extends Resource
                         ])
                         ->default('new')
                         ->inline()
-                        ->columnSpan(6)
-                        ->required(),
+                        ->required()
+                        ->columnSpan([
+                            'md' => '12',
+                            'sm' => '6'
+                        ]),
 
                     Textarea::make('notes')
-                        ->columnSpan(6)
+                        ->columnSpan([
+                            'md' => '12',
+                            'sm' => '6'
+                        ]),
                 ])->columns(12)->columnSpan(12),
                 
                 Repeater::make('orderItems')
@@ -286,14 +305,17 @@ class OrderResource extends Resource
     public static function getRelations(): array
     {
         return [
-            AddressRelationManager::class
+            AddressRelationManager::class,
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => ManageOrders::route('/'),
+            'index' => ListOrders::route('/'),
+            'create' => CreateOrder::route('/create'),
+            // 'view' => ViewOrder::route('/{record}'),
+            'edit' => EditOrder::route('/{record}/edit'),
         ];
     }
 

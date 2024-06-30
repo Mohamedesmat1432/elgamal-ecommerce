@@ -2,7 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ItemResource\Pages\ManageItems;
+use App\Filament\Resources\ItemResource\Pages\CreateItem;
+use App\Filament\Resources\ItemResource\Pages\EditItem;
+use App\Filament\Resources\ItemResource\Pages\ListItems;
+use App\Filament\Resources\ItemResource\Pages\ViewItem;
 use App\Filament\Resources\ItemResource\RelationManagers;
 use App\Models\Item;
 use Filament\Forms\Components\FileUpload;
@@ -226,7 +229,7 @@ class ItemResource extends Resource
                     ->searchable(),
             ])
             ->actions([
-                ActionGroup::make([
+                // ActionGroup::make([
                     ViewAction::make(),
                     EditAction::make()
                         ->color('primary')
@@ -244,7 +247,7 @@ class ItemResource extends Resource
                                 foreach ($record->images as $image) Storage::disk('public')->delete($image);
                             }
                         }),
-                ])
+                // ])
             ])
             ->bulkActions([
                 BulkActionGroup::make([
@@ -265,7 +268,10 @@ class ItemResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ManageItems::route('/'),
+            'index' => ListItems::route('/'),
+            'create' => CreateItem::route('/create'),
+            // 'view' => ViewItem::route('/{record}'),
+            'edit' => EditItem::route('/{record}/edit'),
         ];
     }
 

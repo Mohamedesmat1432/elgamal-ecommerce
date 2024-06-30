@@ -2,8 +2,11 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BranchResource\Pages\ManageBranches;
+use App\Filament\Resources\BranchResource\Pages\EditBranch;
+use App\Filament\Resources\BranchResource\Pages\ListBranches;
+use App\Filament\Resources\BranchResource\Pages\ViewBranch;
 use App\Filament\Resources\BranchResource\RelationManagers;
+use App\Filament\Resources\BrandResource\Pages\CreateBranch;
 use App\Models\Branch;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
@@ -147,7 +150,10 @@ class BranchResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ManageBranches::route('/'),
+            'index' => ListBranches::route('/'),
+            'create' => CreateBranch::route('/create'),
+            // 'view' => ViewBranch::route('/{record}'),
+            'edit' => EditBranch::route('/{record}/edit'),
         ];
     }
 

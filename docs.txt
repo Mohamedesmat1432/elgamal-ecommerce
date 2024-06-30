@@ -38,3 +38,8 @@ class User extends Authenticatable implements FilamentUser
 'register_role_policy' => [
     'enabled' => true,
 ],
+
+
+
+php artisan make:filament-user
+php artisan shield:install
