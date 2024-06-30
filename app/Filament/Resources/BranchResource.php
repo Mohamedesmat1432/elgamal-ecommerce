@@ -109,9 +109,9 @@ class BranchResource extends Resource
                     ViewAction::make(),
                     EditAction::make()
                         ->color('primary')
-                        // ->visible(function ($record) {
-                        //     return!$record->trashed();
-                        // })
+                        ->visible(function ($record) {
+                            return !$record->trashed();
+                        })
                         ->before(function ($record, $data) {
                             if (isset($record->image) && $data['image'] !== $record->image) {
                                 Storage::disk('public')->delete($record->image);
@@ -166,10 +166,10 @@ class BranchResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getEloquentQuery()->count();
+        return static::getModel()::count();
     }
 
-    public static function getLabel(): string
+    public static function getLabel(): ?string
     {
         return __('site.branches');
     }

@@ -14,6 +14,7 @@ class Address extends Model
     protected $table = 'addresses';
 
     protected $fillable = [
+        'order_id',
         'f_name',
         'l_name',
         'phone',
@@ -21,7 +22,7 @@ class Address extends Model
         'street',
         'city',
         'country',
-        'zip_code'
+        'zip_code',
     ];
 
     public function order(): BelongsTo

@@ -24,7 +24,7 @@ class Order extends Model
         'shipping_amount',
         'currency',
         'note',
-        'status'
+        'status',
     ];
 
     public function user(): BelongsTo

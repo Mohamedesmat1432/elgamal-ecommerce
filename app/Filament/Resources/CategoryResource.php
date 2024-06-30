@@ -121,7 +121,7 @@ class CategoryResource extends Resource
                     EditAction::make()
                         ->color('primary')
                         ->visible(function ($record) {
-                            return!$record->trashed();
+                            return !$record->trashed();
                         })
                         ->before(function ($record, $data) {
                             if (isset($record->image) && $data['image'] !== $record->image) {
@@ -178,10 +178,10 @@ class CategoryResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getEloquentQuery()->count();
+        return static::getModel()::count();
     }
 
-    public static function getLabel(): string
+    public static function getLabel(): ?string
     {
         return __('site.categories');
     }

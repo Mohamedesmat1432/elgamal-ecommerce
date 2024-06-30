@@ -15,8 +15,6 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\Action;
-
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
@@ -229,22 +227,15 @@ class ItemResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    ViewAction::make()
-                        ->visible(function ($record) {
-                            return!$record->trashed();
-                        }),
-
+                    ViewAction::make(),
                     EditAction::make()
                         ->color('primary')
                         ->visible(function ($record) {
-                            return!$record->trashed();
+                            return !$record->trashed();
                         })->before(function ($record, $data) {
                             $imagesToRemove = array_diff($record->images, $data['images']);
-                            foreach ($imagesToRemove as $image) {
-                                Storage::disk('public')->delete($image);
-                            }
+                            foreach ($imagesToRemove as $image) Storage::disk('public')->delete($image);
                         }),
-
                     DeleteAction::make(),
                     RestoreAction::make(),
                     ForceDeleteAction::make()
@@ -259,7 +250,14 @@ class ItemResource extends Resource
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                     RestoreBulkAction::make(),
-                    ForceDeleteBulkAction::make(),
+                    ForceDeleteBulkAction::make()
+                        ->after(function ($records) {
+                            foreach ($records as $record) {
+                                if($record->images) {
+                                    foreach ($record->images as $image) Storage::disk('public')->delete($image);
+                                }
+                            }
+                        }),
                 ]),
             ]);
     }
@@ -286,10 +284,10 @@ class ItemResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getEloquentQuery()->count();
+        return static::getModel()::count();
     }
 
-    public static function getLabel(): string
+    public static function getLabel(): ?string
     {
         return __('site.items');
     }
