@@ -15,12 +15,12 @@ return new class extends Migration {
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->decimal('grand_total', 10, 2);
             $table->decimal('shipping_amount', 10, 2)->default(0);
-            $table->string('shipping_method')->nullable();
-            $table->string('payment_method')->nullable();
-            $table->string('payment_status')->nullable();
-            $table->string('currency')->nullable();
+            $table->enum('shipping_method', ['fedex', 'ups', 'usps', 'hdl'])->default('fedex');
+            $table->enum('payment_method', ['stripe', 'cod'])->default('cod');
+            $table->enum('payment_status', ['pending', 'paid', 'faild'])->default('pending');
+            $table->enum('currency', ['inr', 'usd', 'eur'])->default('inr');
+            $table->enum('status', ['new', 'processing', 'shipped', 'delivered', 'canceled'])->default('new');
             $table->text('note')->nullable();
-            $table->enum('status', ['new', 'processing', 'shipped', 'delivered', 'canceled'])->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -6,12 +6,12 @@ use App\Models\Item;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
-class ItemsOverview extends BaseWidget
+class StatsItems extends BaseWidget
 {
     protected function getStats(): array
     {
         return [
-            Stat::make(__('site.items'), Item::count())
+            Stat::make(__('site.items'), Item::query()->count())
                 ->description(__('site.items'))
                 ->url(route('filament.admin.resources.items.index'))
                 ->descriptionIcon('heroicon-o-squares-2x2')

@@ -2,7 +2,8 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Resources\ItemResource\Widgets\ItemsOverview;
+use App\Filament\Resources\OrderResource\Widgets\LatestOrder;
+use App\Filament\Resources\OrderResource\Widgets\StatusOrder;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\FontProviders\LocalFontProvider;
 use Filament\Http\Middleware\Authenticate;
@@ -48,7 +49,8 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 AccountWidget::class,
                 FilamentInfoWidget::class,
-                ItemsOverview::class,
+                StatusOrder::class,
+                LatestOrder::class
             ])
             ->middleware([
                 EncryptCookies::class,

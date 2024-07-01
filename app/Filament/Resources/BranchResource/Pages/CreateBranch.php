@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\BrandResource\Pages;
 
-use App\Filament\Resources\BrandResource;
+use App\Filament\Resources\BranchResource;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateBranch extends CreateRecord
 {
-    protected static string $resource = BrandResource::class;
+    protected static string $resource = BranchResource::class;
 }

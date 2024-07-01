@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Filament\Resources\OrderResource\RelationManagers;
+namespace App\Filament\Resources\UserResource\RelationManagers;
 
+use App\Filament\Resources\OrderResource;
+use App\Models\Order;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
@@ -16,53 +18,17 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class AddressRelationManager extends RelationManager
+class OrdersRelationManager extends RelationManager
 {
-    protected static string $relationship = 'address';
+    protected static string $relationship = 'orders';
 
-    protected static ?string $recordTitleAttribute = 'street';
+    protected static ?string $recordTitleAttribute = 'id';
 
     public function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('f_name')
-                    ->label(__('site.f_name'))
-                    ->required()
-                    ->maxLength(255),
-
-                TextInput::make('l_name')
-                    ->label(__('site.l_name'))
-                    ->required()
-                    ->maxLength(255),
-
-                TextInput::make('phone')
-                    ->label(__('site.phone'))
-                    ->required()
-                    ->maxLength(255),
-
-                TextInput::make('email')
-                    ->label(__('site.email'))
-                    ->required()
-                    ->maxLength(255),
-
-                TextInput::make('street')
-                    ->label(__('site.street'))
-                    ->required()
-                    ->maxLength(255),
-
-                TextInput::make('city')
-                    ->label(__('site.city'))
-                    ->required()
-                    ->maxLength(255),
-
-                TextInput::make('country')
-                    ->label(__('site.country'))
-                    ->required()
-                    ->maxLength(255),
-
-                TextInput::make('zip_code')
-                    ->label(__('site.zip_code'))
+                TextInput::make('grand_total')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -78,56 +44,60 @@ class AddressRelationManager extends RelationManager
                     ->sortable()
                     ->toggleable(),
 
-                TextColumn::make('f_name')
-                    ->label(__('site.f_name'))
+                TextColumn::make('user.name')
+                    ->label(__('site.customer'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
 
-                TextColumn::make('l_name')
-                    ->label(__('site.l_name'))
+                TextColumn::make('grand_total')
+                    ->label(__('site.grand_total'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
 
-                TextColumn::make('phone')
-                    ->label(__('site.phone'))
+                TextColumn::make('payment_method')
+                    ->label(__('site.payment_method'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
 
-                TextColumn::make('phone')
-                    ->label(__('site.phone'))
+                TextColumn::make('payment_status')
+                    ->label(__('site.payment_status'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
 
-                TextColumn::make('email')
-                    ->label(__('site.email'))
+                TextColumn::make('shipping_method')
+                    ->label(__('site.shipping_method'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
 
-                TextColumn::make('street')
-                    ->label(__('site.street'))
+                TextColumn::make('currency')
+                    ->label(__('site.currency'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
 
-                    TextColumn::make('city')
-                    ->label(__('site.city'))
+                TextColumn::make('status')
+                    ->label(__('site.status'))
+                    ->badge()
+                    ->color(fn (string $state): string =>  match($state) {
+                        'new' => 'info',
+                        'processing' => 'warning',
+                        'shipped' =>'success',
+                        'delivered' =>'success',
+                        'cancelled' =>'danger',
+                    })
+                    ->icon(fn (string $state): string => match($state) {
+                        'new' => 'heroicon-m-sparkles',
+                        'processing' => 'heroicon-m-arrow-path',
+                        'shipped' => 'heroicon-m-truck',
+                        'delivered' => 'heroicon-m-check-circle',
+                        'cancelled' => 'heroicon-m-x-circle',
+                    })
                     ->searchable()
-                    ->sortable()
-                    ->toggleable(),
-
-                TextColumn::make('country')
-                    ->label(__('site.country'))
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(),
-
-                TextColumn::make('zip_code')
-                    ->label(__('site.zip_code'))
                     ->sortable()
                     ->toggleable(),
 
@@ -147,16 +117,24 @@ class AddressRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                CreateAction::make(),
+                // CreateAction::make(),
             ])
             ->actions([
-                EditAction::make(),
+                Action::make(__('site.view'))
+                    ->icon('heroicon-o-eye')
+                    ->url(fn (Order $record): string => OrderResource::getUrl('view', ['record' => $record])),
+
+                Action::make(__('site.edit'))
+                    ->icon('heroicon-o-pencil-square')
+                    ->color('info')
+                    ->url(fn (Order $record): string => OrderResource::getUrl('edit', ['record' => $record])),
+
                 DeleteAction::make(),
             ])
             ->bulkActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                // BulkActionGroup::make([
+                //     DeleteBulkAction::make(),
+                // ]),
             ]);
     }
 
@@ -170,21 +148,21 @@ class AddressRelationManager extends RelationManager
 
     public static function getLabel(): ?string
     {
-        return __('site.addresses');
+        return __('site.orders');
     }
 
     public static function getModelLabel(): string
     {
-        return __('site.address');
+        return __('site.order');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('site.addresses');
+        return __('site.orders');
     }
 
     public function getTableHeading(): string
     {
-        return __('site.addresses');
+        return __('site.orders');
     }
 }

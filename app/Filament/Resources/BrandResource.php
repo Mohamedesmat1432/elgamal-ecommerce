@@ -45,29 +45,31 @@ class BrandResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')
+                    ->label(__('site.name'))
                     ->maxLength(255)
                     ->required()
                     ->live(onBlur: true)
-                    ->afterStateUpdated(fn(Set $set, $state) =>  $set('slug', Str::slug($state)))
-                    ->placeholder('Name'),
+                    ->afterStateUpdated(fn(Set $set, $state) =>  $set('slug', Str::slug($state))),
 
                 TextInput::make('slug')
+                    ->label(__('site.slug'))
                     ->maxLength(255)
                     ->disabled()
                     ->required()
                     ->dehydrated()
-                    ->unique(Brand::class, 'slug', ignoreRecord: true)
-                    ->placeholder('Slug'),
+                    ->unique(Brand::class, 'slug', ignoreRecord: true),
 
                 FileUpload::make('image')
+                    ->label(__('site.image'))
                     ->image()
                     ->imageEditor()
                     ->minSize(1)
                     ->maxSize(1024)
-                    ->directory('brands')
+                    ->directory('branches')
                     ->columnSpanFull(),
 
                 Toggle::make('is_active')
+                    ->label(__('site.is_active'))
                     ->required()
                     ->default(true),
             ]);
@@ -77,29 +79,41 @@ class BrandResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('id')
+                    ->label(__('site.id'))
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+
                 TextColumn::make('name')
+                    ->label(__('site.name'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
 
                 TextColumn::make('slug')
+                    ->label(__('site.slug'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
 
                 ImageColumn::make('image')
+                    ->label(__('site.image'))
                     ->toggleable(),
 
                 IconColumn::make('is_active')
+                    ->label(__('site.is_active'))
                     ->boolean()
                     ->toggleable(),
 
                 TextColumn::make('created_at')
+                    ->label(__('site.created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('updated_at')
+                    ->label(__('site.updated_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -109,9 +123,8 @@ class BrandResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    ViewAction::make(),
-                    EditAction::make()
-                        ->color('primary')
+                    ViewAction::make()->color('primary'),
+                    EditAction::make()->color('info')
                         ->visible(function ($record) {
                             return !$record->trashed();
                         })
@@ -152,7 +165,7 @@ class BrandResource extends Resource
         return [
             'index' => ListBrands::route('/'),
             'create' => CreateBrand::route('/create'),
-            // 'view' => ViewBrand::route('/{record}'),
+            'view' => ViewBrand::route('/{record}'),
             'edit' => EditBrand::route('/{record}/edit'),
         ];
     }

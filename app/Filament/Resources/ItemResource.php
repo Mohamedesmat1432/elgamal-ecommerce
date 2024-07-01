@@ -139,6 +139,12 @@ class ItemResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('id')
+                    ->label(__('site.id'))
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+
                 TextColumn::make('name')
                     ->label(__('site.name'))
                     ->searchable()
@@ -229,10 +235,9 @@ class ItemResource extends Resource
                     ->searchable(),
             ])
             ->actions([
-                // ActionGroup::make([
-                    ViewAction::make(),
-                    EditAction::make()
-                        ->color('primary')
+                ActionGroup::make([
+                    ViewAction::make()->color('primary'),
+                    EditAction::make()->color('info')
                         ->visible(function ($record) {
                             return !$record->trashed();
                         })->before(function ($record, $data) {
@@ -247,7 +252,7 @@ class ItemResource extends Resource
                                 foreach ($record->images as $image) Storage::disk('public')->delete($image);
                             }
                         }),
-                // ])
+                ])
             ])
             ->bulkActions([
                 BulkActionGroup::make([
@@ -270,7 +275,7 @@ class ItemResource extends Resource
         return [
             'index' => ListItems::route('/'),
             'create' => CreateItem::route('/create'),
-            // 'view' => ViewItem::route('/{record}'),
+            'view' => ViewItem::route('/{record}'),
             'edit' => EditItem::route('/{record}/edit'),
         ];
     }

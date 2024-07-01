@@ -2,6 +2,11 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Currency;
+use App\Enums\OrderStatus;
+use App\Enums\PaymentMethod;
+use App\Enums\PaymentStatus;
+use App\Enums\ShippingMethod;
 use App\Filament\Resources\OrderResource\Pages\CreateOrder;
 use App\Filament\Resources\OrderResource\Pages\EditOrder;
 use App\Filament\Resources\OrderResource\Pages\ListOrders;
@@ -21,6 +26,7 @@ use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Forms\Get;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
@@ -58,40 +64,28 @@ class OrderResource extends Resource
 
                     Select::make('payment_method')
                         ->label(__('site.payment_method'))
-                        ->options([
-                            'stripe' => __('site.stripe'),
-                            'cod' => __('site.cod'),
-                        ])
+                        ->options(PaymentMethod::class)
                         ->columnSpan(6)
-                        ->default('cod')
+                        ->default(PaymentMethod::Cod)
                         ->required()
                         ->searchable(),
 
                     Select::make('payment_status')
                         ->label(__('site.payment_status'))
-                        ->options([
-                            'pending' => __('site.pending'),
-                            'paid' => __('site.paid'),
-                            'faild' => __('site.faild'),
-                        ])
-                        ->default('pending')
+                        ->options(PaymentStatus::class)
+                        ->default(PaymentStatus::Pending)
                         ->required()
                         ->searchable()
                         ->columnSpan([
                             'md' => '4',
                             'sm' => '6'
                         ]),
-                    
-                    
+
+
                     Select::make('currency')
                         ->label(__('site.currency'))
-                        ->options([
-                            'inr' => 'INR',
-                            'usd' => 'USD',
-                            'eg' => 'EG',
-                            'eur' => 'EUR',
-                        ])
-                        ->default('usd')
+                        ->options(Currency::class)
+                        ->default(Currency::Usd)
                         ->required()
                         ->searchable()
                         ->columnSpan([
@@ -101,13 +95,8 @@ class OrderResource extends Resource
 
                     Select::make('shipping_method')
                         ->label(__('site.shipping_method'))
-                        ->options([
-                            'fedex' => 'FedEx',
-                            'ups' =>'UPS',
-                            'usps' =>'USPS',
-                            'hdl' => 'HDL',
-                        ])
-                        ->default('fedex')
+                        ->options(ShippingMethod::class)
+                        ->default(ShippingMethod::Fedex)
                         ->required()
                         ->searchable()
                         ->columnSpan([
@@ -117,28 +106,8 @@ class OrderResource extends Resource
 
                     ToggleButtons::make('status')
                         ->label(__('site.status'))
-                        ->options([
-                            'new' => __('site.new'),
-                            'processing' => __('site.processing'),
-                            'shipped' => __('site.shipped'),
-                            'delivered' => __('site.delivered'),
-                            'cancelled' => __('site.cancelled'),
-                        ])
-                        ->colors([
-                            'new' => 'info',
-                            'processing' => 'warning',
-                            'shipped' =>'success',
-                            'delivered' =>'success',
-                            'cancelled' =>'danger',
-                        ])
-                        ->icons([
-                            'new' => 'heroicon-m-sparkles',
-                            'processing' => 'heroicon-m-arrow-path',
-                            'shipped' => 'heroicon-m-truck',
-                            'delivered' => 'heroicon-m-check-circle',
-                            'cancelled' => 'heroicon-m-x-circle',
-                        ])
-                        ->default('new')
+                        ->options(OrderStatus::class)
+                        ->default(OrderStatus::New)
                         ->inline()
                         ->required()
                         ->columnSpan([
@@ -152,7 +121,7 @@ class OrderResource extends Resource
                             'sm' => '6'
                         ]),
                 ])->columns(12)->columnSpan(12),
-                
+
                 Repeater::make('orderItems')
                     ->label(__('site.order_items'))
                     ->relationship()->schema([
@@ -162,7 +131,7 @@ class OrderResource extends Resource
                             ->required()
                             ->preload()
                             ->searchable()
-                            ->distinct() 
+                            ->distinct()
                             ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                             ->columnSpan(4)
                             ->reactive()
@@ -194,7 +163,7 @@ class OrderResource extends Resource
                             ->numeric()
                             ->required()
                             ->dehydrated()
-                            ->columnSpan(3),                               
+                            ->columnSpan(3),
                     ])->columns(12)->columnSpan(12),
 
                 Placeholder::make('grand_total_placeholder')
@@ -225,6 +194,12 @@ class OrderResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('id')
+                    ->label(__('site.id'))
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+
                 TextColumn::make('user.name')
                     ->label(__('site.customer'))
                     ->searchable()
@@ -236,7 +211,7 @@ class OrderResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
-                
+
                 TextColumn::make('payment_method')
                     ->label(__('site.payment_method'))
                     ->searchable()
@@ -263,6 +238,21 @@ class OrderResource extends Resource
 
                 TextColumn::make('status')
                     ->label(__('site.status'))
+                    ->badge()
+                    ->color(fn (string $state): string =>  match($state) {
+                        'new' => 'info',
+                        'processing' => 'warning',
+                        'shipped' =>'success',
+                        'delivered' =>'success',
+                        'cancelled' =>'danger',
+                    })
+                    ->icon(fn (string $state): string => match($state) {
+                        'new' => 'heroicon-m-sparkles',
+                        'processing' => 'heroicon-m-arrow-path',
+                        'shipped' => 'heroicon-m-truck',
+                        'delivered' => 'heroicon-m-check-circle',
+                        'cancelled' => 'heroicon-m-x-circle',
+                    })
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
@@ -283,15 +273,16 @@ class OrderResource extends Resource
                 TrashedFilter::make(),
             ])
             ->actions([
-                ViewAction::make(),
-                EditAction::make()
-                    ->color('primary')
-                    ->visible(function ($record) {
-                        return !$record->trashed();
-                    }),
-                DeleteAction::make(),
-                RestoreAction::make(),
-                ForceDeleteAction::make(),
+                ActionGroup::make([
+                    ViewAction::make()->color('primary'),
+                    EditAction::make()->color('info')
+                        ->visible(function ($record) {
+                            return !$record->trashed();
+                        }),
+                    DeleteAction::make(),
+                    RestoreAction::make(),
+                    ForceDeleteAction::make(),
+                ])
             ])
             ->bulkActions([
                 BulkActionGroup::make([
@@ -301,7 +292,17 @@ class OrderResource extends Resource
                 ]),
             ]);
     }
-    
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => ListOrders::route('/'),
+            'create' => CreateOrder::route('/create'),
+            'view' => ViewOrder::route('/{record}'),
+            'edit' => EditOrder::route('/{record}/edit'),
+        ];
+    }
+
     public static function getRelations(): array
     {
         return [
@@ -309,22 +310,10 @@ class OrderResource extends Resource
         ];
     }
 
-    public static function getPages(): array
-    {
-        return [
-            'index' => ListOrders::route('/'),
-            'create' => CreateOrder::route('/create'),
-            // 'view' => ViewOrder::route('/{record}'),
-            'edit' => EditOrder::route('/{record}/edit'),
-        ];
-    }
-
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
+            ->withoutGlobalScopes([SoftDeletingScope::class]);
     }
 
     public static function getNavigationLabel(): string

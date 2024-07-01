@@ -81,6 +81,12 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('id')
+                    ->label(__('site.id'))
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+
                 TextColumn::make('name')
                     ->label(__('site.name'))
                     ->searchable()
@@ -120,9 +126,8 @@ class CategoryResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    ViewAction::make(),
-                    EditAction::make()
-                        ->color('primary')
+                    ViewAction::make()->color('primary'),
+                    EditAction::make()->color('info')
                         ->visible(function ($record) {
                             return !$record->trashed();
                         })
@@ -164,7 +169,7 @@ class CategoryResource extends Resource
         return [
             'index' => ListCategories::route('/'),
             'create' => CreateCategory::route('/create'),
-            // 'view' => ViewCategory::route('/{record}'),
+            'view' => ViewCategory::route('/{record}'),
             'edit' => EditCategory::route('/{record}/edit'),
         ];
     }
