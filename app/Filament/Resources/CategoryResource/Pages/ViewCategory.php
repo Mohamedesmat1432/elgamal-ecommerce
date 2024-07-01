@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\CategoryResource\Pages;
 
 use App\Filament\Resources\CategoryResource;
-use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 
 class ViewCategory extends ViewRecord
@@ -13,7 +13,7 @@ class ViewCategory extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            // DeleteAction::make(),
+            EditAction::make(),
         ];
     }
 }

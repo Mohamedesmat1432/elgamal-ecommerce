@@ -21,6 +21,8 @@ use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
@@ -120,12 +122,16 @@ class RoleResource extends Resource implements HasShieldPermissions
                 //
             ])
             ->actions([
-                ViewAction::make(),
-                EditAction::make(),
-                DeleteAction::make(),
+               ActionGroup::make([
+                    ViewAction::make()->color('primary'),
+                    EditAction::make()->color('info'),
+                    DeleteAction::make(),
+               ])
             ])
             ->bulkActions([
-                DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ])
             ]);
     }
 
@@ -141,7 +147,7 @@ class RoleResource extends Resource implements HasShieldPermissions
         return [
             'index' => ListRoles::route('/'),
             'create' => CreateRole::route('/create'),
-            // 'view' => ViewRole::route('/{record}'),
+            'view' => ViewRole::route('/{record}'),
             'edit' => EditRole::route('/{record}/edit'),
         ];
     }

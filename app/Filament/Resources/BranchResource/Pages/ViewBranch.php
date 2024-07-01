@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\BranchResource\Pages;
 
 use App\Filament\Resources\BranchResource;
-use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 
 class ViewBranch extends ViewRecord
@@ -13,7 +13,7 @@ class ViewBranch extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            // DeleteAction::make(),
+            EditAction::make(),
         ];
     }
 }

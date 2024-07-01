@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\BrandResource\Pages;
 
 use App\Filament\Resources\BrandResource;
-use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 
 class ViewBrand extends ViewRecord
@@ -13,7 +13,7 @@ class ViewBrand extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            // DeleteAction::make(),
+            EditAction::make(),
         ];
     }
 }
