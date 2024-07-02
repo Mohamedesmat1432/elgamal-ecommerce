@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\BrandResource\Pages;
+namespace App\Filament\Resources\BranchResource\Pages;
 
 use App\Filament\Resources\BranchResource;
 use Filament\Resources\Pages\CreateRecord;

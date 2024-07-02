@@ -11,7 +11,6 @@ php artisan icons:cache
 php artisan filament:cache-components
 php artisan filament:clear-cached-components
 
-
 Role and permission shield plugin:
 ---------------------------------
 composer require bezhansalleh/filament-shield
@@ -39,7 +38,9 @@ class User extends Authenticatable implements FilamentUser
     'enabled' => true,
 ],
 
-
-
 php artisan make:filament-user
 php artisan shield:install
+
+Theme ui github link:
+--------------------
+https://github.com/DCodeMania/ecommerce-ui-resources

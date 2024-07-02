@@ -2,11 +2,11 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\BranchResource\Pages\CreateBranch;
 use App\Filament\Resources\BranchResource\Pages\EditBranch;
 use App\Filament\Resources\BranchResource\Pages\ListBranches;
 use App\Filament\Resources\BranchResource\Pages\ViewBranch;
 use App\Filament\Resources\BranchResource\RelationManagers;
-use App\Filament\Resources\BrandResource\Pages\CreateBranch;
 use App\Models\Branch;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
