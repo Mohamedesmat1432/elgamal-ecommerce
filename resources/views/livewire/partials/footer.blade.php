@@ -45,7 +45,8 @@
                         <div
                             class="mt-4 flex flex-col items-center gap-2 sm:flex-row sm:gap-3 bg-white rounded-lg p-2 dark:bg-gray-800">
                             <div class="w-full">
-                                <input type="text" id="hero-input" name="hero-input"
+                                <label for="subscribe" class="hidden"></label>
+                                <input type="text" id="subscribe" name="subscribe"
                                     class="py-3 px-4 block w-full border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-transparent dark:text-gray-400 dark:focus:ring-gray-600"
                                     placeholder="Enter your email">
                             </div>

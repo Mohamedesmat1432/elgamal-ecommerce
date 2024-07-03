@@ -46,4 +46,19 @@ class Item extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    public function scopeIsActive($query, $boolean)
+    {
+        return $query->where('is_active', $boolean);
+    }
+
+    public function scopeInStock($query, $boolean)
+    {
+        return $query->where('in_stock', $boolean);
+    }
+
+    public function scopeOnSale($query, $boolean)
+    {
+        return $query->where('on_sale', $boolean);
+    }
 }

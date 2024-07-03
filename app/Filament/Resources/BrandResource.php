@@ -65,7 +65,7 @@ class BrandResource extends Resource
                     ->imageEditor()
                     ->minSize(1)
                     ->maxSize(1024)
-                    ->directory('branches')
+                    ->directory('brands')
                     ->columnSpanFull(),
 
                 Toggle::make('is_active')

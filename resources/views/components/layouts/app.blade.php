@@ -16,5 +16,7 @@
         </main>
         @livewire('partials.footer')
         @livewireScripts
+
+        <x-livewire-alert::scripts />
     </body>
 </html>

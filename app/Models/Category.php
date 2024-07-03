@@ -24,4 +24,9 @@ class Category extends Model
     {
         return $this->hasMany(Item::class);
     }
+
+    public function scopeIsActive($query, $boolean)
+    {
+        return $query->where('is_active', $boolean);
+    }
 }

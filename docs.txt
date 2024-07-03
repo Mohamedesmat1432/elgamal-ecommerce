@@ -44,3 +44,11 @@ php artisan shield:install
 Theme ui github link:
 --------------------
 https://github.com/DCodeMania/ecommerce-ui-resources
+
+
+Sweet alert:
+------------
+npm install sweetalert2
+import swal from 'sweetalert2';
+window.Swal = swal;
+https://github.com/jantinnerezo/livewire-alert
