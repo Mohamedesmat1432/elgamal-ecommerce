@@ -13,7 +13,7 @@ use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-#[Title('items')]
+#[Title('Items')]
 class ItemsPage extends Component
 {
     use WithPagination, LivewireAlert;
@@ -38,7 +38,7 @@ class ItemsPage extends Component
 
     public function addToCart($item_id)
     {
-        $cart_count = Cart::addItemToCart($item_id);
+        $cart_count = Cart::add($item_id);
         $this->dispatch('update-cart-count', cart_count: $cart_count)->to(Navbar::class);
         $this->alert('success', 'Item add to cart successfully');
     }

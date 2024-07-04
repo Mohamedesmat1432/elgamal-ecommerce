@@ -6,8 +6,10 @@ use App\Helpers\Cart;
 use App\Livewire\Partials\Navbar;
 use App\Models\Item;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Item Detials')]
 class ItemDetailsPage extends Component
 {
     use LivewireAlert;
@@ -22,7 +24,7 @@ class ItemDetailsPage extends Component
 
     public function addToCart($item_id)
     {
-        $cart_count = Cart::addItemToCart($item_id, $this->quantity);
+        $cart_count = Cart::add($item_id, $this->quantity);
         $this->dispatch('update-cart-count', cart_count: $cart_count)->to(Navbar::class);
         $this->alert('success', 'Item add to cart successfully');
     }

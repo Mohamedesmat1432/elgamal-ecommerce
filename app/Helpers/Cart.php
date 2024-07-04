@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Cookie;
 class Cart
 {
     //Add item to cart
-    public static function addItemToCart($item_id, $qty = 1)
+    public static function add($item_id, $qty = 1)
     {
-        $cart_items = self::getCartItemsFromCookie();
+        $cart_items = self::all();
         $old_item = null;
 
         foreach ($cart_items as $key => $item) {
@@ -34,14 +34,14 @@ class Cart
             ];
         }
 
-        self::addCartItemsToCookie($cart_items);
+        self::addToCookie($cart_items);
         return count($cart_items);
     }
 
     //Remove item to cart
-    public static function removeItemFromCart($item_id)
+    public static function remove($item_id)
     {
-        $cart_items = self::getCartItemsFromCookie();
+        $cart_items = self::all();
 
         foreach ($cart_items as $key => $item) {
             if ($item['item_id'] == $item_id) {
@@ -49,33 +49,33 @@ class Cart
             }
         }
 
-        self::addCartItemsToCookie($cart_items);
+        self::addToCookie($cart_items);
         return $cart_items;
     }
 
     //Add cart items to cookie
-    public static function addCartItemsToCookie($cart_items)
+    public static function addToCookie($cart_items)
     {
         Cookie::queue('cart_items', json_encode($cart_items), 60 * 24 * 60);
     }
 
     //Remove cart items to cookie
-    public static function clearCartItemsFromCookie()
+    public static function clearFromCookie()
     {
         Cookie::queue(Cookie::forget('cart_items'));
     }
 
     //All cart items from cookie
-    public static function getCartItemsFromCookie()
+    public static function all()
     {
         $cart_items = json_decode(Cookie::get('cart_items'), true);
         return $cart_items ? $cart_items : [];
     }
 
     //Icrement item quantity
-    public static function increaseCartItem($item_id)
+    public static function increase($item_id)
     {
-        $cart_items = self::getCartItemsFromCookie();
+        $cart_items = self::all();
 
         foreach ($cart_items as $key => $item) {
             if ($item['item_id'] == $item_id) {
@@ -84,14 +84,14 @@ class Cart
             }
         }
 
-        self::addCartItemsToCookie($cart_items);
+        self::addToCookie($cart_items);
         return $cart_items;
     }
 
     //Decrement item quantity
-    public static function decreaseCartItem($item_id)
+    public static function decrease($item_id)
     {
-        $cart_items = self::getCartItemsFromCookie();
+        $cart_items = self::all();
 
         foreach ($cart_items as $key => $item) {
             if ($item['item_id'] == $item_id) {
@@ -102,12 +102,12 @@ class Cart
             }
         }
 
-        self::addCartItemsToCookie($cart_items);
+        self::addToCookie($cart_items);
         return $cart_items;
     }
 
     //Calculate grant total
-    public static function calculateGrantTotal($items)
+    public static function calculateTotal($items)
     {
         return array_sum(array_column($items, 'total_amount'));
     }
