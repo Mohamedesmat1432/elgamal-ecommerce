@@ -18,29 +18,29 @@ class ItemsPage extends Component
 {
     use WithPagination, LivewireAlert;
 
-    #[Url()]
+    #[Url]
     public $selected_categories = [];
 
-    #[Url()]
+    #[Url]
     public $selected_brands = [];
 
-    #[Url()]
+    #[Url]
     public $sort = 'latest';
 
-    #[Url()]
+    #[Url]
     public $in_stock = 0;
 
-    #[Url()]
+    #[Url]
     public $on_sale = 0;
 
-    #[Url()]
+    #[Url]
     public $price_range = 30000;
 
     public function addToCart($item_id)
     {
         $cart_count = Cart::add($item_id);
         $this->dispatch('update-cart-count', cart_count: $cart_count)->to(Navbar::class);
-        $this->alert('success', 'Item add to cart successfully');
+        $this->alert('success', 'Success', ['text' => 'Item add to cart successfully']);
     }
 
     public function render()
@@ -49,31 +49,31 @@ class ItemsPage extends Component
         $categories = Category::isActive(1)->get(['id', 'name', 'slug']);
         $items = Item::isActive(1);
 
-        if(!empty($this->selected_categories)){
+        if (!empty($this->selected_categories)) {
             $items->whereIn('category_id', $this->selected_categories);
         }
 
-        if(!empty($this->selected_brands)){
+        if (!empty($this->selected_brands)) {
             $items->whereIn('brand_id', $this->selected_brands);
         }
 
-        if($this->sort == 'latest') {
+        if ($this->sort == 'latest') {
             $items->latest();
         }
 
-        if($this->sort == 'price') {
+        if ($this->sort == 'price') {
             $items->orderBy('price');
         }
 
-        if($this->in_stock) {
+        if ($this->in_stock) {
             $items->inStock(1);
         }
 
-        if($this->on_sale) {
+        if ($this->on_sale) {
             $items->onSale(1);
         }
 
-        if($this->price_range) {
+        if ($this->price_range) {
             $items->whereBetween('price', [0, $this->price_range]);
         }
 

@@ -273,7 +273,7 @@ class OrderResource extends Resource
                 TrashedFilter::make(),
             ])
             ->actions([
-                ActionGroup::make([
+                // ActionGroup::make([
                     ViewAction::make()->color('primary'),
                     EditAction::make()->color('info')
                         ->visible(function ($record) {
@@ -282,7 +282,7 @@ class OrderResource extends Resource
                     DeleteAction::make(),
                     RestoreAction::make(),
                     ForceDeleteAction::make(),
-                ])
+                // ])
             ])
             ->bulkActions([
                 BulkActionGroup::make([

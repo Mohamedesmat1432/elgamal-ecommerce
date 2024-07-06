@@ -5,8 +5,6 @@ namespace App\Livewire\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
@@ -17,14 +15,12 @@ class LoginPage extends Component
 
     public string $email = '';
     public string $password = '';
-    public bool $remember = false;
 
     public function rules()
     {
         return [
             'email' => 'required|email|exists:users|string|max:255',
             'password' => 'required|string|min:6|max:255',
-            'remember' => 'nullable|boolean',
         ];
     }
 
@@ -34,19 +30,19 @@ class LoginPage extends Component
 
         $this->authenticate();
 
-        Session::regenerate();
-
         $this->alert('success', 'Login has been successfully');
 
-        $this->redirectIntended(default: route('home', absolute: false), navigate: true);
+        $this->redirect(route('home'), navigate: true);
     }
 
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
 
-        if (!Auth::attempt($this->only(['email', 'password']), $this->remember)) {
+        if (!auth()->attempt(['email' => $this->email, 'password' => $this->password])) {
             RateLimiter::hit($this->throttleKey());
+            
+            $this->alert('error', trans('auth.failed'));
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),

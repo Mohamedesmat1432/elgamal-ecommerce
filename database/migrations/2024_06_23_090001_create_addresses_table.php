@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained('orders')->cascadeOnDelete();
             $table->string('f_name')->nullable();
             $table->string('l_name')->nullable();
-            $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->string('street')->nullable();
             $table->string('city')->nullable();

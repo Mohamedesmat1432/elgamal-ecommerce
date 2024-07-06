@@ -27,7 +27,7 @@ class Cart
             $cart_items[] = [
                 'item_id' => $item->id,
                 'name' => $item->name,
-                'image' => $item->images[0],
+                'image' => !empty($item->images) ? $item->images[0] : '',
                 'quantity' => $qty,
                 'unit_amount' => $item->price,
                 'total_amount' => $item->price,

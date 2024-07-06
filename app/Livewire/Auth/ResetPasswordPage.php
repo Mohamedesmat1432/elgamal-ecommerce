@@ -3,7 +3,6 @@
 namespace App\Livewire\Auth;
 
 use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
@@ -26,7 +25,7 @@ class ResetPasswordPage extends Component
         return [
             'token' => 'required',
             'email' => 'required|string|email|max:255|exists:users,email',
-            'password' => 'required|string|confirmed|' . Rules\Password::defaults(),
+            'password' => 'required|string|confirmed|min:6',
         ];
     }
 
@@ -60,7 +59,7 @@ class ResetPasswordPage extends Component
 
         $this->alert('success', __($status));
 
-        $this->redirectIntended(default: route('login', absolute: false), navigate: true);
+        $this->redirect(route('login'), navigate: true);
     }
 
     public function render()

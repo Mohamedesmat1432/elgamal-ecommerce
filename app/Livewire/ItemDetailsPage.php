@@ -26,7 +26,7 @@ class ItemDetailsPage extends Component
     {
         $cart_count = Cart::add($item_id, $this->quantity);
         $this->dispatch('update-cart-count', cart_count: $cart_count)->to(Navbar::class);
-        $this->alert('success', 'Item add to cart successfully');
+        $this->alert('success', 'Success', ['text' => 'Item add to cart successfully']);
     }
 
     public function increaseQty()
@@ -36,7 +36,7 @@ class ItemDetailsPage extends Component
 
     public function decreaseQty()
     {
-        if($this->quantity > 1) {
+        if ($this->quantity > 1) {
             $this->quantity--;
         }
     }
