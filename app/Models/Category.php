@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Observers\CategoryObsrver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -19,6 +20,11 @@ class Category extends Model
         'image',
         'is_active',
     ];
+
+    protected static function boot() {
+        parent::boot();
+        static::observe(CategoryObsrver::class);
+    }
 
     public function items(): HasMany
     {

@@ -241,11 +241,11 @@ class ItemResource extends Resource
                         ->visible(function ($record) {
                             return !$record->trashed();
                         })
-                        ->before(function ($record, $data) {
-                            dd($record->images);
-                            $imagesToRemove = array_diff($record->images, $data['images']);
-                            foreach ($imagesToRemove as $image) Storage::disk('public')->delete($image);
-                        }),
+                        // ->before(function ($record, $data) {
+                        //     $imagesToRemove = array_diff($record->images, $data['images']);
+                        //     foreach ($imagesToRemove as $image) Storage::disk('public')->delete($image);
+                        // })
+                        ,
                     DeleteAction::make(),
                     RestoreAction::make(),
                     ForceDeleteAction::make()

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Observers\ItemObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,6 +32,11 @@ class Item extends Model
     protected $casts = [
         'images' => 'array'
     ];
+
+    protected static function boot() {
+        parent::boot();
+        static::observe(ItemObserver::class);
+    }
 
     public function brand(): BelongsTo
     {

@@ -122,40 +122,23 @@ class BrandResource extends Resource
                 TrashedFilter::make(),
             ])
             ->actions([
-                ActionGroup::make([
+                // ActionGroup::make([
                     ViewAction::make()->color('primary'),
                     EditAction::make()->color('info')
                         ->visible(function ($record) {
                             return !$record->trashed();
-                        })
-                        ->before(function ($record, $data) {
-                            if (isset($record->image) && $data['image'] !== $record->image) {
-                                Storage::disk('public')->delete($record->image);
-                            }
                         }),
                     DeleteAction::make(),
                     RestoreAction::make(),
-                    ForceDeleteAction::make()
-                        ->after(function ($record) {
-                            if ($record->image) {
-                                Storage::disk('public')->delete($record->image);
-                            }
-                        }),
-                ])
+                    ForceDeleteAction::make(),
+                // ])
             ])
             ->bulkActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                     RestoreBulkAction::make()
                         ->color('primary'),
-                    ForceDeleteBulkAction::make()
-                        ->after(function ($records) {
-                            foreach ($records as $record) {
-                                if ($record->image) {
-                                    Storage::disk('public')->delete($record->image);
-                                }
-                            }
-                        }),
+                    ForceDeleteBulkAction::make(),
                 ]),
             ]);
     }
