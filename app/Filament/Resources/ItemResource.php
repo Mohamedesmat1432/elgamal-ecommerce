@@ -236,8 +236,8 @@ class ItemResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    ViewAction::make(),
-                    EditAction::make()->color('info')
+                    ViewAction::make()->color('warning'),
+                    EditAction::make()->color('primary')
                         ->visible(function ($record) {
                             return !$record->trashed();
                         })

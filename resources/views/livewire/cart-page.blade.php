@@ -17,7 +17,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($cart_items as $item)
-                                    <tr wire:key="cart-{{ $item['item_id'] }}">
+                                    <tr wire:key="cart-item-{{ $item['item_id'] }}">
                                         <td class="py-4">
                                             <div class="flex items-center">
                                                 <img class="h-16 w-16 mr-4" src="{{ url('storage', $item['image']) }}"
@@ -40,7 +40,14 @@
                                             <button wire:click="removeFromCart({{ $item['item_id'] }})"
                                                 class="bg-slate-300 border-2 border-slate-400 rounded-lg px-3 py-1 hover:bg-red-500 hover:text-white hover:border-red-700">
                                                 <span wire:loading.remove
-                                                    wire:target="removeFromCart({{ $item['item_id'] }})">Remove</span>
+                                                    wire:target="removeFromCart({{ $item['item_id'] }})">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                        class="size-6">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M6 18 18 6M6 6l12 12" />
+                                                    </svg>
+                                                </span>
                                                 <span wire:loading
                                                     wire:target="removeFromCart({{ $item['item_id'] }})">Loading...</span>
                                             </button>
@@ -72,10 +79,12 @@
                             <span class="font-semibold">Total</span>
                             <span class="font-semibold">{{ Number::currency($grand_total ?? 0, 'INR') }}</span>
                         </div>
-                        <a wire:navigate href="{{ route('checkout') }}"
-                            class="bg-blue-500 text-white text-center py-2 px-4 rounded-lg mt-4 w-full block">
-                            Checkout
-                        </a>
+                        @if (!empty($cart_items))
+                            <a wire:navigate href="{{ route('checkout') }}"
+                                class="bg-blue-500 text-white text-center py-2 px-4 rounded-lg mt-4 w-full block">
+                                Checkout
+                            </a>
+                        @endif
                     </div>
                 </div>
             </div>

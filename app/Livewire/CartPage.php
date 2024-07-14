@@ -39,7 +39,7 @@ class CartPage extends Component
         $this->cart_items = Cart::remove($item_id);
         $this->grand_total = Cart::calculateTotal($this->cart_items);
         $this->dispatch('update-cart-count', cart_count: count($this->cart_items))->to(Navbar::class);
-        $this->alert('success', 'Success',[ 'text' => 'Item remove from cart successfully']);
+        $this->alert('success', 'Success', ['text' => 'Item remove from cart successfully']);
     }
 
     public function render()

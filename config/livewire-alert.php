@@ -6,14 +6,13 @@
  */
 return [
     'alert' => [
-        'position' => 'top-start',
+        'position' => 'top-end',
         'timer' => 3000,
         'toast' => true,
         'text' => null,
         'showCancelButton' => false,
         'showConfirmButton' => false,
-        'allowOutsideClick' => true,
-        'timerProgressBar' => true,        
+        'timerProgressBar' => true,
     ],
     'confirm' => [
         'icon' => 'warning',

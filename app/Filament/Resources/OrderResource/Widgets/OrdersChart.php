@@ -11,6 +11,7 @@ use Illuminate\Contracts\Support\Htmlable;
 class OrdersChart extends ChartWidget
 {
     // protected static ?string $heading = 'Chart';
+    protected static ?string $pollingInterval = '10s';
 
     public function getHeading(): string | Htmlable | null
     {

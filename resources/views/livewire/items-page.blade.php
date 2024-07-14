@@ -80,7 +80,7 @@
                             <div
                                 class="items-center justify-between hidden px-3 py-2 bg-gray-100 md:flex dark:bg-gray-900 ">
                                 <div class="flex items-center justify-between">
-                                    <select wire:model.live="sort"
+                                    <select wire:model.live="sort" id="sort-field"
                                         class="block w-40 text-base bg-gray-100 cursor-pointer dark:text-gray-400 dark:bg-gray-900">
                                         <option value="latest">Sort by latest</option>
                                         <option value="price">Sort by Price</option>
@@ -90,7 +90,7 @@
                         </div>
                         <div class="flex flex-wrap items-center ">
                             @foreach ($items as $item)
-                                <div class="w-full px-3 mb-6 sm:w-1/2 md:w-1/3">
+                                <div wire:key="item-{{ $item->id }}" class="w-full px-3 mb-6 sm:w-1/2 md:w-1/3">
                                     <div class="border border-gray-300 dark:border-gray-700">
                                         <div class="relative bg-gray-200">
                                             <a wire:navigate
