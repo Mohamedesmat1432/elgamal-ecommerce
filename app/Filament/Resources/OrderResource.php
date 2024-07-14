@@ -273,22 +273,16 @@ class OrderResource extends Resource
                 TrashedFilter::make(),
             ])
             ->actions([
-<<<<<<< HEAD
                 ActionGroup::make([
                     ViewAction::make()->color('warning'),
                     EditAction::make()->color('primary')
-=======
-                // ActionGroup::make([
-                    ViewAction::make()->color('primary'),
-                    EditAction::make()->color('info')
->>>>>>> cd432dbcbf6419a670eb4073c256ec5e411abe55
                         ->visible(function ($record) {
                             return !$record->trashed();
                         }),
                     DeleteAction::make(),
                     RestoreAction::make(),
                     ForceDeleteAction::make(),
-                // ])
+                ])
             ])
             ->bulkActions([
                 BulkActionGroup::make([
