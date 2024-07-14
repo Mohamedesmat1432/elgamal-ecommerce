@@ -23,7 +23,7 @@ class StatusOrder extends BaseWidget
                 ->url(route('filament.admin.resources.orders.index'))
                 ->descriptionIcon('heroicon-o-arrow-path')
                 ->chart(Order::query()->status('processing')->pluck('id')->toArray())
-                ->color('primary'),
+                ->color('warning'),
 
             Stat::make(__('site.shipped_order'), Order::query()->status('shipped')->count())
                 ->description(__('site.shipped'))

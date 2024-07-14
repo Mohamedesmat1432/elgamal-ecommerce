@@ -8,4 +8,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateItem extends CreateRecord
 {
     protected static string $resource = ItemResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->previousUrl ?? $this->getResource()::getUrl('index');
+    }
 }

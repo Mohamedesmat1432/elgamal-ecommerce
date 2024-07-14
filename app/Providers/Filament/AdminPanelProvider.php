@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Resources\OrderResource\Widgets\LatestOrder;
+use App\Filament\Resources\OrderResource\Widgets\OrdersChart;
 use App\Filament\Resources\OrderResource\Widgets\StatusOrder;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\FontProviders\LocalFontProvider;
@@ -28,17 +29,22 @@ class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
-        ->default()
-        ->id('admin')
-        ->path('admin')
-        ->font('Inter', url: asset('css/site.css'), provider: LocalFontProvider::class)
+            ->default()
+            ->id('admin')
+            ->path('admin')
+            ->font('Inter', url: asset('css/site.css'), provider: LocalFontProvider::class)
             ->favicon(asset('images/logo-camel.png'))
             ->brandName(__('site.elgamal'))
             ->brandLogo(asset('images/brand-logo-camel-removebg-preview.png'))
             ->brandLogoHeight('3rem')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                'danger' => Color::Rose,
+                'gray' => Color::Gray,
+                'info' => Color::Blue,
+                'primary' => Color::Blue,
+                'success' => Color::Emerald,
+                'warning' => Color::Orange,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
@@ -50,7 +56,8 @@ class AdminPanelProvider extends PanelProvider
                 AccountWidget::class,
                 FilamentInfoWidget::class,
                 StatusOrder::class,
-                LatestOrder::class
+                LatestOrder::class,
+                OrdersChart::class,
             ])
             ->middleware([
                 EncryptCookies::class,

@@ -123,8 +123,8 @@ class RoleResource extends Resource implements HasShieldPermissions
             ])
             ->actions([
                ActionGroup::make([
-                    ViewAction::make()->color('primary'),
-                    EditAction::make()->color('info'),
+                    ViewAction::make()->color('warning'),
+                    EditAction::make()->color('primary'),
                     DeleteAction::make(),
                ])
             ])

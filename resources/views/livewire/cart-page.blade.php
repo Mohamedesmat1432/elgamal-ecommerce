@@ -35,11 +35,14 @@
                                                     class="border rounded-md py-2 px-4 ml-2">+</button>
                                             </div>
                                         </td>
-                                        <td class="py-4">{{  Number::currency($item['total_amount'], 'INR') }}</td>
+                                        <td class="py-4">{{ Number::currency($item['total_amount'], 'INR') }}</td>
                                         <td>
                                             <button wire:click="removeFromCart({{ $item['item_id'] }})"
                                                 class="bg-slate-300 border-2 border-slate-400 rounded-lg px-3 py-1 hover:bg-red-500 hover:text-white hover:border-red-700">
-                                                Remove
+                                                <span wire:loading.remove
+                                                    wire:target="removeFromCart({{ $item['item_id'] }})">Remove</span>
+                                                <span wire:loading
+                                                    wire:target="removeFromCart({{ $item['item_id'] }})">Loading...</span>
                                             </button>
                                         </td>
                                     </tr>

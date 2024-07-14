@@ -123,8 +123,8 @@ class BranchResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    ViewAction::make()->color('primary'),
-                    EditAction::make()->color('info')
+                    ViewAction::make()->color('warning'),
+                    EditAction::make()->color('primary')
                         ->visible(function ($record) {
                             return !$record->trashed();
                         })
