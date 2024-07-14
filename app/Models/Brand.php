@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Observers\BrandObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -19,6 +20,11 @@ class Brand extends Model
         'image',
         'is_active',
     ];
+
+    protected static function boot() {
+        parent::boot();
+        static::observe(BrandObserver::class);
+    }
 
     public function items(): HasMany
     {

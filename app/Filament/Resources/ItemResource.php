@@ -235,15 +235,23 @@ class ItemResource extends Resource
                     ->searchable(),
             ])
             ->actions([
+<<<<<<< HEAD
                 ActionGroup::make([
                     ViewAction::make()->color('warning'),
                     EditAction::make()->color('primary')
+=======
+                // ActionGroup::make([
+                    ViewAction::make(),
+                    EditAction::make()->color('info')
+>>>>>>> cd432dbcbf6419a670eb4073c256ec5e411abe55
                         ->visible(function ($record) {
                             return !$record->trashed();
-                        })->before(function ($record, $data) {
-                            $imagesToRemove = array_diff($record->images, $data['images']);
-                            foreach ($imagesToRemove as $image) Storage::disk('public')->delete($image);
-                        }),
+                        })
+                        // ->before(function ($record, $data) {
+                        //     $imagesToRemove = array_diff($record->images, $data['images']);
+                        //     foreach ($imagesToRemove as $image) Storage::disk('public')->delete($image);
+                        // })
+                        ,
                     DeleteAction::make(),
                     RestoreAction::make(),
                     ForceDeleteAction::make()
@@ -252,7 +260,7 @@ class ItemResource extends Resource
                                 foreach ($record->images as $image) Storage::disk('public')->delete($image);
                             }
                         }),
-                ])
+                // ])
             ])
             ->bulkActions([
                 BulkActionGroup::make([

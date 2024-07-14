@@ -10,7 +10,7 @@
                                 Don't have an account yet?
                                 <a wire:navigate
                                     class="text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                                    href="/register">
+                                    href="{{route('register')}}">
                                     Sign up here
                                 </a>
                             </p>
@@ -58,7 +58,7 @@
                                         </label>
                                         <a wire:navigate
                                             class="text-sm text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                                            href="/forget-password">
+                                            href="{{ route('password.forget') }}">
                                             Forgot password?
                                         </a>
                                     </div>
@@ -66,7 +66,7 @@
                                         <input type="password" id="password" wire:model="password"
                                             class="py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
                                             required aria-describedby="password-error">
-                                        @error('passsword')
+                                        @error('password')
                                             <div
                                                 class="absolute inset-y-0 end-0 flex items-center pointer-events-none pe-3">
                                                 <svg class="h-5 w-5 text-red-500" width="16" height="16"

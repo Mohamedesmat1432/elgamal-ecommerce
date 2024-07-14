@@ -30,7 +30,7 @@ class Navbar extends Component
 
         $this->alert('success', 'Logout has been successfully');
 
-        $this->redirectIntended(default: route('home', absolute: false), navigate: true);
+        $this->redirect(route('home'), navigate: true);
     }
 
     public function render()

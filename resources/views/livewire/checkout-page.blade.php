@@ -17,66 +17,171 @@
                                 <label class="block text-gray-700 dark:text-white mb-1" for="first_name">
                                     First Name
                                 </label>
-                                <input
-                                    class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none"
-                                    id="first_name" type="text">
-                                </input>
+                                <div class="relative">
+                                    <input wire:model="f_name"
+                                        class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none  @error('f_name') border-red-500 @enderror"
+                                        id="first_name" type="text" />
+                                    @error('f_name')
+                                        <div class="absolute inset-y-0 end-0 flex items-center pointer-events-none pe-3">
+                                            <svg class="h-5 w-5 text-red-500" width="16" height="16"
+                                                fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                                                <path
+                                                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+                                            </svg>
+                                        </div>
+                                    @enderror
+                                </div>
+                                @error('f_name')
+                                    <p class="text-xs text-red-600 mt-2" id="f_name-error">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-white mb-1" for="last_name">
                                     Last Name
                                 </label>
-                                <input
-                                    class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none"
-                                    id="last_name" type="text">
-                                </input>
+                                <div class="relative">
+                                    <input wire:model="l_name"
+                                        class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none @error('l_name') border-red-500 @enderror"
+                                        id="last_name" type="text" />
+                                    @error('l_name')
+                                        <div class="absolute inset-y-0 end-0 flex items-center pointer-events-none pe-3 ">
+                                            <svg class="h-5 w-5 text-red-500" width="16" height="16"
+                                                fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                                                <path
+                                                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+                                            </svg>
+                                        </div>
+                                    @enderror
+                                </div>
+                                @error('l_name')
+                                    <p class="text-xs text-red-600 mt-2" id="l_name-error">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
                             </div>
                         </div>
                         <div class="mt-4">
                             <label class="block text-gray-700 dark:text-white mb-1" for="phone">
                                 Phone
                             </label>
-                            <input
-                                class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none"
-                                id="phone" type="text">
-                            </input>
+                            <div class="relative">
+                                <input wire:model="phone"
+                                    class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none @error('phone') border-red-500 @enderror"
+                                    id="phone" type="text" />
+                                @error('phone')
+                                    <div class="absolute inset-y-0 end-0 flex items-center pointer-events-none pe-3">
+                                        <svg class="h-5 w-5 text-red-500" width="16" height="16" fill="currentColor"
+                                            viewBox="0 0 16 16" aria-hidden="true">
+                                            <path
+                                                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+                                        </svg>
+                                    </div>
+                                @enderror
+                            </div>
+                            @error('phone')
+                                <p class="text-xs text-red-600 mt-2" id="phone-error">
+                                    {{ $message }}
+                                </p>
+                            @enderror
                         </div>
                         <div class="mt-4">
-                            <label class="block text-gray-700 dark:text-white mb-1" for="address">
-                                Address
+                            <label class="block text-gray-700 dark:text-white mb-1" for="street">
+                                Street
                             </label>
-                            <input
-                                class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none"
-                                id="address" type="text">
-                            </input>
+                            <div class="relative">
+                                <input wire:model="street"
+                                    class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none @error('street') border-red-500 @enderror"
+                                    id="street" type="text" />
+                                @error('street')
+                                    <div class="absolute inset-y-0 end-0 flex items-center pointer-events-none pe-3">
+                                        <svg class="h-5 w-5 text-red-500" width="16" height="16" fill="currentColor"
+                                            viewBox="0 0 16 16" aria-hidden="true">
+                                            <path
+                                                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+                                        </svg>
+                                    </div>
+                                @enderror
+                            </div>
+                            @error('street')
+                                <p class="text-xs text-red-600 mt-2" id="street-error">
+                                    {{ $message }}
+                                </p>
+                            @enderror
                         </div>
                         <div class="mt-4">
                             <label class="block text-gray-700 dark:text-white mb-1" for="city">
                                 City
                             </label>
-                            <input
-                                class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none"
-                                id="city" type="text">
-                            </input>
+                            <div class="relative">
+                                <input wire:model="city"
+                                    class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none @error('city') border-red-500 @enderror"
+                                    id="city" type="text" />
+                                @error('city')
+                                    <div class="absolute inset-y-0 end-0 flex items-center pointer-events-none pe-3">
+                                        <svg class="h-5 w-5 text-red-500" width="16" height="16" fill="currentColor"
+                                            viewBox="0 0 16 16" aria-hidden="true">
+                                            <path
+                                                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+                                        </svg>
+                                    </div>
+                                @enderror
+                            </div>
+                            @error('city')
+                                <p class="text-xs text-red-600 mt-2" id="city-error">
+                                    {{ $message }}
+                                </p>
+                            @enderror
                         </div>
                         <div class="grid grid-cols-2 gap-4 mt-4">
                             <div>
-                                <label class="block text-gray-700 dark:text-white mb-1" for="state">
-                                    State
+                                <label class="block text-gray-700 dark:text-white mb-1" for="country">
+                                    Country
                                 </label>
-                                <input
-                                    class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none"
-                                    id="state" type="text">
-                                </input>
+                                <div class="relative">
+                                    <input wire:model="country"
+                                        class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none @error('country') border-red-500 @enderror"
+                                        id="country" type="text" />
+                                    @error('country')
+                                        <div class="absolute inset-y-0 end-0 flex items-center pointer-events-none pe-3">
+                                            <svg class="h-5 w-5 text-red-500" width="16" height="16"
+                                                fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                                                <path
+                                                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+                                            </svg>
+                                        </div>
+                                    @enderror
+                                </div>
+                                @error('country')
+                                    <p class="text-xs text-red-600 mt-2" id="country-error">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
                             </div>
                             <div>
-                                <label class="block text-gray-700 dark:text-white mb-1" for="zip">
+                                <label class="block text-gray-700 dark:text-white mb-1" for="zip_code">
                                     ZIP Code
                                 </label>
-                                <input
-                                    class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none"
-                                    id="zip" type="text">
-                                </input>
+                                <div class="relative">
+                                    <input wire:model="zip_code"
+                                        class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none @error('zip_code') border-red-500 @enderror"
+                                        id="zip_code" type="text" />
+                                    @error('zip_code')
+                                        <div class="absolute inset-y-0 end-0 flex items-center pointer-events-none pe-3">
+                                            <svg class="h-5 w-5 text-red-500" width="16" height="16"
+                                                fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                                                <path
+                                                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+                                            </svg>
+                                        </div>
+                                    @enderror
+                                </div>
+                                @error('zip_code')
+                                    <p class="text-xs text-red-600 mt-2" id="zip_code-error">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -85,11 +190,11 @@
                     </div>
                     <ul class="grid w-full gap-6 md:grid-cols-2">
                         <li>
-                            <input class="hidden peer" id="hosting-small" name="hosting" required="" type="radio"
-                                value="hosting-small" />
+                            <input class="hidden peer" id="cod" wire:model="payment_method" required
+                                type="radio" value="cod" />
                             <label
                                 class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
-                                for="hosting-small">
+                                for="cod">
                                 <div class="block">
                                     <div class="w-full text-lg font-semibold">
                                         Cash on Delivery
@@ -104,11 +209,11 @@
                             </label>
                         </li>
                         <li>
-                            <input class="hidden peer" id="hosting-big" name="hosting" type="radio"
-                                value="hosting-big">
+                            <input class="hidden peer" id="stripe" wire:model="payment_method" type="radio"
+                                value="stripe">
                             <label
                                 class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
-                                for="hosting-big">
+                                for="stripe">
                                 <div class="block">
                                     <div class="w-full text-lg font-semibold">
                                         Stripe
@@ -121,7 +226,6 @@
                                     </path>
                                 </svg>
                             </label>
-                            </input>
                         </li>
                     </ul>
                 </div>
@@ -137,7 +241,7 @@
                             Subtotal
                         </span>
                         <span>
-                            45,000.00
+                            {{ Number::currency($grand_total ?? 0, 'INR') }}
                         </span>
                     </div>
                     <div class="flex justify-between mb-2 font-bold">
@@ -145,7 +249,7 @@
                             Taxes
                         </span>
                         <span>
-                            0.00
+                            {{ Number::currency(0, 'INR') }}
                         </span>
                     </div>
                     <div class="flex justify-between mb-2 font-bold">
@@ -153,7 +257,7 @@
                             Shipping Cost
                         </span>
                         <span>
-                            0.00
+                            {{ Number::currency(0, 'INR') }}
                         </span>
                     </div>
                     <hr class="bg-slate-400 my-4 h-1 rounded">
@@ -162,12 +266,13 @@
                             Grand Total
                         </span>
                         <span>
-                            45,000.00
+                            {{ Number::currency($grand_total ?? 0, 'INR') }}
                         </span>
                     </div>
                     </hr>
                 </div>
-                <button class="bg-green-500 mt-4 w-full p-3 rounded-lg text-lg text-white hover:bg-green-600">
+                <button type="submit" wire:click="placeOrder"
+                    class="bg-green-500 mt-4 w-full p-3 rounded-lg text-lg text-white hover:bg-green-600">
                     Place Order
                 </button>
                 <div class="bg-white mt-4 rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
@@ -175,69 +280,35 @@
                         BASKET SUMMARY
                     </div>
                     <ul class="divide-y divide-gray-200 dark:divide-gray-700" role="list">
-                        <li class="py-3 sm:py-4">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0">
-                                    <img alt="Neil image" class="w-12 h-12 rounded-full"
-                                        src="https://iplanet.one/cdn/shop/files/iPhone_15_Pro_Max_Blue_Titanium_PDP_Image_Position-1__en-IN_1445x.jpg?v=1695435917">
-                                    </img>
+                        @forelse ($cart_items as $item)
+                            <li class="py-3 sm:py-4">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0">
+                                        <img alt="{{ $item['name'] }}" class="w-12 h-12 rounded-full"
+                                            src="{{ $item['image'] }}">
+                                        </img>
+                                    </div>
+                                    <div class="flex-1 min-w-0 ms-4">
+                                        <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                                            {{ $item['name'] }}
+                                        </p>
+                                        <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                                            {{ $item['quantity'] }}
+                                        </p>
+                                    </div>
+                                    <div
+                                        class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                                        {{ Number::currency($item['total_amount'] ?? 0, 'INR') }}
+                                    </div>
                                 </div>
-                                <div class="flex-1 min-w-0 ms-4">
-                                    <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-                                        Apple iPhone 15 Pro Max
-                                    </p>
-                                    <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                                        Quantity: 1
-                                    </p>
+                            </li>
+                        @empty
+                            <li class="py-3 sm:py-4">
+                                <div class="flex items-center">
+                                    No data
                                 </div>
-                                <div
-                                    class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                    $320
-                                </div>
-                            </div>
-                        </li>
-                        <li class="py-3 sm:py-4">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0">
-                                    <img alt="Neil image" class="w-12 h-12 rounded-full"
-                                        src="https://iplanet.one/cdn/shop/files/iPhone_15_Pro_Max_Blue_Titanium_PDP_Image_Position-1__en-IN_1445x.jpg?v=1695435917">
-                                    </img>
-                                </div>
-                                <div class="flex-1 min-w-0 ms-4">
-                                    <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-                                        Apple iPhone 15 Pro Max
-                                    </p>
-                                    <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                                        Quantity: 1
-                                    </p>
-                                </div>
-                                <div
-                                    class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                    $320
-                                </div>
-                            </div>
-                        </li>
-                        <li class="py-3 sm:py-4">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0">
-                                    <img alt="Neil image" class="w-12 h-12 rounded-full"
-                                        src="https://iplanet.one/cdn/shop/files/iPhone_15_Pro_Max_Blue_Titanium_PDP_Image_Position-1__en-IN_1445x.jpg?v=1695435917">
-                                    </img>
-                                </div>
-                                <div class="flex-1 min-w-0 ms-4">
-                                    <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-                                        Apple iPhone 15 Pro Max
-                                    </p>
-                                    <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                                        Quantity: 1
-                                    </p>
-                                </div>
-                                <div
-                                    class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                    $320
-                                </div>
-                            </div>
-                        </li>
+                            </li>
+                        @endforelse
                     </ul>
                 </div>
             </div>

@@ -4,7 +4,7 @@ namespace App\Filament\Resources\OrderResource\Widgets;
 
 use App\Filament\Resources\OrderResource;
 use App\Models\Order;
-use Filament\Tables;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\DeleteAction;
@@ -14,6 +14,7 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class LatestOrder extends BaseWidget
 {
+    use HasWidgetShield;
     protected int | array | string $columnSpan = 'full';
 
     public function table(Table $table): Table

@@ -58,7 +58,7 @@ class UserResource extends Resource
                 DateTimePicker::make('email_verified_at')
                     ->label(__('site.email_verified_at'))
                     ->placeholder(__('site.email_verified_at'))
-                    ->required()
+                    ->nullable()
                     ->date()
                     ->default(now()),
 
@@ -72,8 +72,8 @@ class UserResource extends Resource
                 Select::make('roles')
                     ->label(__('site.roles'))
                     ->placeholder(__('site.roles'))
+                    ->nullable()
                     ->relationship('roles', 'name')
-                    ->required()
                     ->multiple()
                     ->preload()
                     ->searchable(),

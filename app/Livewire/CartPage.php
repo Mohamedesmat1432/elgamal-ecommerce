@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Helpers\Cart;
+use App\Livewire\Partials\Navbar;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -37,7 +38,8 @@ class CartPage extends Component
     {
         $this->cart_items = Cart::remove($item_id);
         $this->grand_total = Cart::calculateTotal($this->cart_items);
-        $this->alert('success', 'Item remove from cart successfully');
+        $this->dispatch('update-cart-count', cart_count: count($this->cart_items))->to(Navbar::class);
+        $this->alert('success', 'Success',[ 'text' => 'Item remove from cart successfully']);
     }
 
     public function render()

@@ -23,10 +23,10 @@ class ForgetPasswordPage extends Component
     {
         $this->validate();
 
-        $status = Password::sendResetLink($this->only('email'));
+        $status = Password::sendResetLink(['email' => $this->email]);
 
         if ($status != Password::RESET_LINK_SENT) {
-            $this->addError('email', __($status));
+            $this->alert('error', __($status));
             return;
         }
 

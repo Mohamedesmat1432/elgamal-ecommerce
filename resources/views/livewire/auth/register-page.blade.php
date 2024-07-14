@@ -9,7 +9,7 @@
                             <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
                                 Already have an account?
                                 <a class="text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                                    href="/login">
+                                    href="{{ route('login') }}">
                                     Sign in here
                                 </a>
                             </p>

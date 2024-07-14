@@ -127,20 +127,10 @@ class BranchResource extends Resource
                     EditAction::make()->color('primary')
                         ->visible(function ($record) {
                             return !$record->trashed();
-                        })
-                        ->before(function ($record, $data) {
-                            if (isset($record->image) && $data['image'] !== $record->image) {
-                                Storage::disk('public')->delete($record->image);
-                            }
                         }),
                     DeleteAction::make(),
                     RestoreAction::make(),
-                    ForceDeleteAction::make()
-                        ->after(function ($record) {
-                            if ($record->image) {
-                                Storage::disk('public')->delete($record->image);
-                            }
-                        }),
+                    ForceDeleteAction::make(),
                 ])
             ])
             ->bulkActions([
@@ -148,14 +138,7 @@ class BranchResource extends Resource
                     DeleteBulkAction::make(),
                     RestoreBulkAction::make()
                         ->color('primary'),
-                    ForceDeleteBulkAction::make()
-                        ->after(function ($records) {
-                            foreach ($records as $record) {
-                                if ($record->image) {
-                                    Storage::disk('public')->delete($record->image);
-                                }
-                            }
-                        }),
+                    ForceDeleteBulkAction::make(),
                 ]),
             ]);
     }
