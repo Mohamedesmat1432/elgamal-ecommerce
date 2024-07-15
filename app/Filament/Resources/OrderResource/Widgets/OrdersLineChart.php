@@ -3,19 +3,23 @@
 namespace App\Filament\Resources\OrderResource\Widgets;
 
 use App\Models\Order;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Contracts\Support\Htmlable;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
-use Illuminate\Contracts\Support\Htmlable;
 
-class OrdersChart extends ChartWidget
+class OrdersLineChart extends ChartWidget
 {
-    // protected static ?string $heading = 'Chart';
+    use HasWidgetShield;
+
     protected static ?string $pollingInterval = '10s';
+
+    protected static ?int $sort = -2;
 
     public function getHeading(): string | Htmlable | null
     {
-        return __('site.orders');
+        return __('site.orders_chart');
     }
 
     protected function getData(): array
@@ -24,12 +28,14 @@ class OrdersChart extends ChartWidget
             ->between(
                 start: now()->startOfYear(),
                 end: now()->endOfYear(),
-            )->perMonth()->count();
+            )
+            ->perMonth()
+            ->sum('grand_total');
 
         return [
             'datasets' => [
                 [
-                    'label' => 'Orders',
+                    'label' => 'Blog posts',
                     'data' => $data->map(fn (TrendValue $value) => $value->aggregate),
                 ],
             ],

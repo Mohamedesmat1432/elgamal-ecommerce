@@ -79,4 +79,6 @@ return [
     'edit' => 'تعديل',
     'delete' => 'حذف',
     'latest_orders' => 'الطلبات الأخيرة',
+    'orders_status' => 'حالات الطلب',
+    'orders_chart' => 'رسم الطلبات',
 ];

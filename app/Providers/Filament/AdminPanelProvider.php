@@ -3,7 +3,8 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Resources\OrderResource\Widgets\LatestOrder;
-use App\Filament\Resources\OrderResource\Widgets\OrdersChart;
+use App\Filament\Resources\OrderResource\Widgets\OrdersLineChart;
+use App\Filament\Resources\OrderResource\Widgets\OrdersPieChart;
 use App\Filament\Resources\OrderResource\Widgets\StatusOrder;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\FontProviders\LocalFontProvider;
@@ -53,11 +54,12 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class,
                 StatusOrder::class,
                 LatestOrder::class,
-                OrdersChart::class,
+                OrdersPieChart::class,
+                OrdersLineChart::class,
+                // AccountWidget::class,
+                // FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

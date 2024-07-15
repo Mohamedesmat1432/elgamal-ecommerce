@@ -79,4 +79,6 @@ return [
     'edit' => 'Edit',
     'delete' => 'Delete',
     'latest_orders' => 'Latest Orders',
+    'orders_status' => 'Orders Status',
+    'orders_chart' => 'Orders Chart',
 ];

@@ -6,10 +6,18 @@ use App\Models\Order;
 use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Contracts\Support\Htmlable;
 
 class StatusOrder extends BaseWidget
 {
     use HasWidgetShield;
+
+    protected static ?int $sort = -4;
+
+    public function getHeading(): string | Htmlable | null
+    {
+        return __('site.orders_status');
+    }
 
     protected function getStats(): array
     {
