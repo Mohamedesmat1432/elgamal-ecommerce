@@ -193,7 +193,7 @@
                             <input class="hidden peer" id="cod" wire:model="payment_method" required
                                 type="radio" value="cod" />
                             <label
-                                class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
+                                class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border @error('payment_method') border-red-500 @enderror  rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
                                 for="cod">
                                 <div class="block">
                                     <div class="w-full text-lg font-semibold">
@@ -212,7 +212,7 @@
                             <input class="hidden peer" id="stripe" wire:model="payment_method" type="radio"
                                 value="stripe">
                             <label
-                                class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
+                                class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border @error('payment_method') border-red-500 @enderror rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
                                 for="stripe">
                                 <div class="block">
                                     <div class="w-full text-lg font-semibold">
@@ -228,6 +228,11 @@
                             </label>
                         </li>
                     </ul>
+                    @error('payment_method')
+                        <p class="text-xs text-red-600 mt-2" id="zip_code-error">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
                 <!-- End Card -->
             </div>

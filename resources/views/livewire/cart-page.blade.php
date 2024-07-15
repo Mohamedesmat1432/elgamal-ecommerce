@@ -38,7 +38,7 @@
                                         <td class="py-4">{{ Number::currency($item['total_amount'], 'INR') }}</td>
                                         <td>
                                             <button wire:click="removeFromCart({{ $item['item_id'] }})"
-                                                class="bg-slate-300 border-2 border-slate-400 rounded-lg px-3 py-1 hover:bg-red-500 hover:text-white hover:border-red-700">
+                                                class="bg-slate-300 border-2 border-slate-400 rounded-lg px-3 py-1 text-red-500 hover:bg-red-500 hover:text-slate-400 hover:border-red-700">
                                                 <span wire:loading.remove
                                                     wire:target="removeFromCart({{ $item['item_id'] }})">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"

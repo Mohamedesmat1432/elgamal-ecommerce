@@ -18,8 +18,13 @@ class CartPage extends Component
 
     public function mount()
     {
+
         $this->cart_items = Cart::all();
         $this->grand_total = Cart::calculateTotal($this->cart_items);
+
+        if (count($this->cart_items) === 0) {
+            return $this->redirect(route('items'), navigate: true);
+        }
     }
 
     public function increaseQty($item_id)

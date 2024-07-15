@@ -60,7 +60,7 @@ class Cart
     }
 
     //Remove cart items to cookie
-    public static function clearFromCookie()
+    public static function clearAll()
     {
         Cookie::queue(Cookie::forget('cart_items'));
     }
