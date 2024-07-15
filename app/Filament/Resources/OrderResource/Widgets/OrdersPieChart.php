@@ -12,8 +12,6 @@ class OrdersPieChart extends ChartWidget
 {
     use HasWidgetShield;
 
-    // protected static ?string $heading = 'Chart';
-
     protected static ?string $pollingInterval = '10s';
 
     protected static ?int $sort = -2;
@@ -44,8 +42,6 @@ class OrdersPieChart extends ChartWidget
             ],
             'labels' => array_keys($data),
         ];
-
-
     }
 
     protected function getType(): string
