@@ -10,6 +10,7 @@ enum ShippingMethod: string implements HasLabel
     case Ups = 'ups';
     case Usps = 'usps';
     case Hdl = 'hdl';
+    case None = 'none';
 
     public function getLabel(): ?string
     {
@@ -18,6 +19,7 @@ enum ShippingMethod: string implements HasLabel
             self::Ups => 'UPS',
             self::Usps => 'USPS',
             self::Hdl => 'HDL',
+            self::None => 'NONE',
         };
     }
 }

@@ -12,7 +12,7 @@ enum OrderStatus: string implements HasLabel, HasIcon, HasColor
     case Processing= 'processing';
     case Shipped = 'shipped';
     case Delivered = 'delivered';
-    case Cancelled = 'cancelled';
+    case Canceled = 'canceled';
 
     public function getLabel(): ?string
     {
@@ -21,7 +21,7 @@ enum OrderStatus: string implements HasLabel, HasIcon, HasColor
             self::Processing => __('site.processing'),
             self::Shipped => __('site.shipped'),
             self::Delivered => __('site.delivered'),
-            self::Cancelled => __('site.cancelled'),
+            self::Canceled => __('site.canceled'),
         };
     }
 
@@ -32,7 +32,7 @@ enum OrderStatus: string implements HasLabel, HasIcon, HasColor
             self::Processing => 'primary',
             self::Shipped => 'success',
             self::Delivered => 'success',
-            self::Cancelled => 'danger',
+            self::Canceled => 'danger',
         };
     }
 
@@ -43,7 +43,7 @@ enum OrderStatus: string implements HasLabel, HasIcon, HasColor
             self::Processing => 'heroicon-m-arrow-path',
             self::Shipped => 'heroicon-m-truck',
             self::Delivered => 'heroicon-m-check-circle',
-            self::Cancelled => 'heroicon-m-x-circle',
+            self::Canceled => 'heroicon-m-x-circle',
         };
     }
 }

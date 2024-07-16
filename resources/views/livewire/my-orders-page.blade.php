@@ -11,7 +11,7 @@
         $payment_status_bg = [
             'pending' => 'bg-blue-500',
             'paid' => 'bg-green-500',
-            'faild' => 'bg-red-500',
+            'failed' => 'bg-red-500',
         ];
     @endphp
 
@@ -92,7 +92,7 @@
                             </tbody>
                         </table>
 
-                        <div class="mt-3 flex">
+                        <div class="mt-3 flex justify-between">
                             {{ $orders->links() }}
                         </div>
                     </div>

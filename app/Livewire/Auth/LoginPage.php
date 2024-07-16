@@ -41,7 +41,7 @@ class LoginPage extends Component
 
         if (!auth()->attempt(['email' => $this->email, 'password' => $this->password])) {
             RateLimiter::hit($this->throttleKey());
-            
+
             $this->alert('error', trans('auth.failed'));
 
             throw ValidationException::withMessages([

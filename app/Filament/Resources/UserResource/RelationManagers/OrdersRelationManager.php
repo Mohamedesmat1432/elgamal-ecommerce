@@ -8,11 +8,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\CreateAction;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -120,21 +116,20 @@ class OrdersRelationManager extends RelationManager
                 // CreateAction::make(),
             ])
             ->actions([
-                Action::make(__('site.view'))
-                    ->icon('heroicon-o-eye')
-                    ->url(fn (Order $record): string => OrderResource::getUrl('view', ['record' => $record])),
+                ActionGroup::make([
+                    Action::make(__('site.view'))
+                        ->icon('heroicon-o-eye')
+                        ->color('warning')
+                        ->url(fn (Order $record): string => OrderResource::getUrl('view', ['record' => $record])),
 
-                Action::make(__('site.edit'))
-                    ->icon('heroicon-o-pencil-square')
-                    ->color('info')
-                    ->url(fn (Order $record): string => OrderResource::getUrl('edit', ['record' => $record])),
-
-                DeleteAction::make(),
+                    Action::make(__('site.edit'))
+                        ->icon('heroicon-o-pencil-square')
+                        ->color('primary')
+                        ->url(fn (Order $record): string => OrderResource::getUrl('edit', ['record' => $record])),
+                ])
             ])
             ->bulkActions([
-                // BulkActionGroup::make([
-                //     DeleteBulkAction::make(),
-                // ]),
+
             ]);
     }
 

@@ -85,7 +85,7 @@ class OrderResource extends Resource
                     Select::make('currency')
                         ->label(__('site.currency'))
                         ->options(Currency::class)
-                        ->default(Currency::Usd)
+                        ->default(Currency::Inr)
                         ->required()
                         ->searchable()
                         ->columnSpan([
@@ -96,7 +96,7 @@ class OrderResource extends Resource
                     Select::make('shipping_method')
                         ->label(__('site.shipping_method'))
                         ->options(ShippingMethod::class)
-                        ->default(ShippingMethod::Fedex)
+                        ->default(ShippingMethod::None)
                         ->required()
                         ->searchable()
                         ->columnSpan([
@@ -244,14 +244,14 @@ class OrderResource extends Resource
                         'processing' => 'warning',
                         'shipped' =>'success',
                         'delivered' =>'success',
-                        'cancelled' =>'danger',
+                        'canceled' =>'danger',
                     })
                     ->icon(fn (string $state): string => match($state) {
                         'new' => 'heroicon-m-sparkles',
                         'processing' => 'heroicon-m-arrow-path',
                         'shipped' => 'heroicon-m-truck',
                         'delivered' => 'heroicon-m-check-circle',
-                        'cancelled' => 'heroicon-m-x-circle',
+                        'canceled' => 'heroicon-m-x-circle',
                     })
                     ->searchable()
                     ->sortable()

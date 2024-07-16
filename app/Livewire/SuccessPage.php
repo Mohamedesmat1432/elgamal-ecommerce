@@ -27,11 +27,11 @@ class SuccessPage extends Component
             $session = Session::retrieve($this->session_id);
 
             if ($session->payment_status != 'paid') {
-                $order->payment_status = 'faild';
+                $order->payment_status = 'failed';
                 $order->save();
                 $this->redirect(route('cancel'), navigate: true);
             } elseif ($session->payment_status == 'paid') {
-                $order->payment_status = 'faild';
+                $order->payment_status = 'paid';
                 $order->save();
             }
         }

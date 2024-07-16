@@ -24,7 +24,7 @@ class OrdersPieChart extends ChartWidget
     protected function getData(): array
     {
         $data = Order::select('status', DB::raw('count(*) as count'))
-            ->groupBy('status')->orderBy('count', 'desc')
+            ->groupBy('status')->orderBy('status', 'asc')
             ->pluck('count','status')->toArray();
 
         return [
@@ -35,6 +35,7 @@ class OrdersPieChart extends ChartWidget
                     'backgroundColor' => [
                         'rgb(54, 162, 235)',
                         'rgb(252, 165, 3)',
+                        'rgb(19, 189, 107)',
                         'rgb(255, 99, 132)',
                       ],
                     'borderColor' => '#9BD0F5',

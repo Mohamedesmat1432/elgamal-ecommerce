@@ -23,8 +23,10 @@ class CheckoutPage extends Component
     public string $country = '';
     public string $zip_code = '';
     public string $payment_method = '';
-    public array $cart_items = [];
     public string $grand_total = '';
+    public string $url = '';
+    public array $cart_items = [];
+    public array $line_items = [];
 
     public function rules()
     {
@@ -50,30 +52,13 @@ class CheckoutPage extends Component
     {
         $this->validate();
 
-        $line_items = [];
-        $redirect_url = '';
-
-        foreach ($this->cart_items as $item) {
-            $line_items[] = [
-                'price_data' => [
-                    'currency' => 'inr',
-                    'unit_amount' => intval($item['unit_amount']),
-                    'product_data' => [
-                        'name' => $item['name'],
-                    ],
-                ],
-                'quantity' => $item['quantity'],
-            ];
-        }
-
         $order = new Order();
         $order->user_id = auth()->user()->id;
         $order->grand_total = $this->grand_total;
         $order->payment_method = $this->payment_method;
         $order->payment_status = 'pending';
-        $order->shipping_method = 'fedex';
+        $order->shipping_method = 'none';
         $order->shipping_amount = 0;
-        $order->status = 'new';
         $order->note = 'Order By ' . auth()->user()->name;
 
         $address = new Address();
@@ -86,21 +71,9 @@ class CheckoutPage extends Component
         $address->country = $this->country;
         $address->zip_code = $this->zip_code;
 
-        if ($this->payment_method == 'stripe') {
-            Stripe::setApiKey(env('STRIPE_SECRET'));
-            $session = Session::create([
-                'payment_method_types' => ['card'],
-                'customer_email' => auth()->user()->email,
-                'line_items' => $line_items,
-                'mode' => 'payment',
-                'success_url' => route('success') . '?session_id={CHECKOUT_SESSION_ID}',
-                'cancel_url' => route('cancel'),
-            ]);
+        $this->checkPaymentData();
 
-            $redirect_url = $session->url;
-        } else {
-            $redirect_url = route('success');
-        }
+        // dd($order->payment_status);
 
         $order->save();
         $order->orderItems()->createMany($this->cart_items);
@@ -109,8 +82,42 @@ class CheckoutPage extends Component
         $address->save();
 
         Cart::clearAll();
+
         Mail::to(request()->user())->send(new OrderPlaced($order));
-        return redirect($redirect_url);
+
+        return redirect($this->url);
+    }
+
+    public function checkPaymentData()
+    {
+        foreach ($this->cart_items as $item) {
+            $this->line_items[] = [
+                'price_data' => [
+                    'currency' => 'INR',
+                    'unit_amount' => intval($item['unit_amount']),
+                    'product_data' => [
+                        'name' => $item['name'],
+                    ],
+                ],
+                'quantity' => $item['quantity'],
+            ];
+        }
+
+        if ($this->payment_method == 'stripe') {
+            Stripe::setApiKey(env('STRIPE_SECRET'));
+            $session = Session::create([
+                'payment_method_types' => ['card'],
+                'customer_email' => auth()->user()->email,
+                'line_items' => $this->line_items,
+                'mode' => 'payment',
+                'success_url' => route('success') . '?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => route('cancel'),
+            ]);
+
+            $this->url = $session->url;
+        } else {
+            $this->url = route('success');
+        }
     }
 
     public function render()

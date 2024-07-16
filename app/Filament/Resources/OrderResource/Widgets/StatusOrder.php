@@ -43,11 +43,11 @@ class StatusOrder extends BaseWidget
                 ->chart(Order::query()->status('shipped')->pluck('id')->toArray())
                 ->color('success'),
 
-            Stat::make(__('site.cancelled_order'), Order::query()->status('cancelled')->count())
-                ->description(__('site.cancelled'))
+            Stat::make(__('site.canceled_order'), Order::query()->status('canceled')->count())
+                ->description(__('site.canceled'))
                 ->url(route('filament.admin.resources.orders.index'))
                 ->descriptionIcon('heroicon-o-x-circle')
-                ->chart(Order::query()->status('cancelled')->pluck('id')->toArray())
+                ->chart(Order::query()->status('canceled')->pluck('id')->toArray())
                 ->color('danger'),
         ];
     }

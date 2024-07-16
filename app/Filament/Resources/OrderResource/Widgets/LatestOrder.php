@@ -77,14 +77,14 @@ class LatestOrder extends BaseWidget
                         'processing' => 'warning',
                         'shipped' =>'success',
                         'delivered' =>'success',
-                        'cancelled' =>'danger',
+                        'canceled' =>'danger',
                     })
                     ->icon(fn (string $state): string => match($state) {
                         'new' => 'heroicon-m-sparkles',
                         'processing' => 'heroicon-m-arrow-path',
                         'shipped' => 'heroicon-m-truck',
                         'delivered' => 'heroicon-m-check-circle',
-                        'cancelled' => 'heroicon-m-x-circle',
+                        'canceled' => 'heroicon-m-x-circle',
                     })
                     ->searchable()
                     ->sortable()

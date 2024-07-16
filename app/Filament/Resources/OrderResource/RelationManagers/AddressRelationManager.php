@@ -152,7 +152,7 @@ class AddressRelationManager extends RelationManager
             ])
             ->actions([
                 ActionGroup::make([
-                    EditAction::make(),
+                    EditAction::make()->color('primary'),
                     DeleteAction::make(),
                 ])
             ])
