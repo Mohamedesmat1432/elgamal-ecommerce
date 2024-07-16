@@ -73,8 +73,6 @@ class CheckoutPage extends Component
 
         $this->checkPaymentData();
 
-        // dd($order->payment_status);
-
         $order->save();
         $order->orderItems()->createMany($this->cart_items);
 
@@ -94,9 +92,10 @@ class CheckoutPage extends Component
             $this->line_items[] = [
                 'price_data' => [
                     'currency' => 'INR',
-                    'unit_amount' => intval($item['unit_amount']),
+                    'unit_amount' => $item['unit_amount'] * 100,
                     'product_data' => [
                         'name' => $item['name'],
+                        'images' => [url('storage', $item['image'])],
                     ],
                 ],
                 'quantity' => $item['quantity'],
@@ -104,7 +103,8 @@ class CheckoutPage extends Component
         }
 
         if ($this->payment_method == 'stripe') {
-            Stripe::setApiKey(env('STRIPE_SECRET'));
+            Stripe::setApiKey(config('stripe.api_key.secret'));
+
             $session = Session::create([
                 'payment_method_types' => ['card'],
                 'customer_email' => auth()->user()->email,
