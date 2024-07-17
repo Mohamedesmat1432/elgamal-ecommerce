@@ -7,15 +7,18 @@ use App\Filament\Resources\ItemResource\Pages\EditItem;
 use App\Filament\Resources\ItemResource\Pages\ListItems;
 use App\Filament\Resources\ItemResource\Pages\ViewItem;
 use App\Filament\Resources\ItemResource\RelationManagers;
+use App\Models\AttributeValue;
 use App\Models\Item;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\ActionGroup;
@@ -43,7 +46,9 @@ class ItemResource extends Resource
 {
     protected static ?string $model = Item::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
+    protected static ?string $navigationIcon = 'heroicon-o-queue-list';
+
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {
@@ -131,6 +136,28 @@ class ItemResource extends Resource
                         ->maxSize(2024)
                         ->maxFiles(5),
                 ])->columns(2)->columnSpan(12),
+
+                Repeater::make('itemAttributes')
+                    ->label(__('site.item_attributes'))
+                    ->relationship()
+                    ->schema([
+                        Select::make('attribute_id')
+                            ->label(__('site.attribute'))
+                            ->relationship('attribute', 'name')
+                            ->preload()
+                            ->searchable()
+                            ->live(),
+                        Select::make('attribute_value_id')
+                            ->label(__('site.value'))
+                            ->preload()
+                            ->searchable()
+                            ->options(function (Get $get) {
+                                return AttributeValue::where('attribute_id', $get('attribute_id'))->pluck('value', 'id');
+                            })
+                    ])
+                    ->columns(2)
+                    ->columnSpanFull()
+                    ->addActionLabel(__('site.add_attribute')),
 
             ])->columns(12);
     }
@@ -240,34 +267,17 @@ class ItemResource extends Resource
                     EditAction::make()->color('primary')
                         ->visible(function ($record) {
                             return !$record->trashed();
-                        })
-                        // ->before(function ($record, $data) {
-                        //     $imagesToRemove = array_diff($record->images, $data['images']);
-                        //     foreach ($imagesToRemove as $image) Storage::disk('public')->delete($image);
-                        // })
-                        ,
+                        }),
                     DeleteAction::make(),
                     RestoreAction::make(),
-                    ForceDeleteAction::make()
-                        ->after(function ($record) {
-                            if ($record->images) {
-                                foreach ($record->images as $image) Storage::disk('public')->delete($image);
-                            }
-                        }),
+                    ForceDeleteAction::make(),
                 ])
             ])
             ->bulkActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                     RestoreBulkAction::make(),
-                    ForceDeleteBulkAction::make()
-                        ->after(function ($records) {
-                            foreach ($records as $record) {
-                                if($record->images) {
-                                    foreach ($record->images as $image) Storage::disk('public')->delete($image);
-                                }
-                            }
-                        }),
+                    ForceDeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -288,6 +298,11 @@ class ItemResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('site.items');
     }
 
     public static function getNavigationLabel(): string

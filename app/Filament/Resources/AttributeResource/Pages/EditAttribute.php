@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\BranchResource\Pages;
+namespace App\Filament\Resources\AttributeResource\Pages;
 
-use App\Filament\Resources\BranchResource;
+use App\Filament\Resources\AttributeResource;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
-class EditBranch extends EditRecord
+class EditAttribute extends EditRecord
 {
-    protected static string $resource = BranchResource::class;
+    protected static string $resource = AttributeResource::class;
 
     protected function getHeaderActions(): array
     {

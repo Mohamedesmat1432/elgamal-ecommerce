@@ -161,6 +161,11 @@ class BrandResource extends Resource
             ]);
     }
 
+    public static function getNavigationGroup(): ?string
+    {
+        return __('site.items');
+    }
+
     public static function getNavigationLabel(): string
     {
         return __('site.brands');

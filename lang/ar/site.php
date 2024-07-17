@@ -81,4 +81,11 @@ return [
     'latest_orders' => 'الطلبات الأخيرة',
     'orders_status' => 'حالات الطلب',
     'orders_chart' => 'رسم الطلبات',
+    'attribute' => 'الخاصية',
+    'attributes' => 'الخصائص',
+    'attribute_value' => 'قيمة الخصاصية',
+    'attribute_values' => 'قيم الخصائص',
+    'value' => 'القيمة',
+    'item_attributes' => 'خصائص الصنف',
+    'add_attribute' => 'اضافة خاصية',
 ];

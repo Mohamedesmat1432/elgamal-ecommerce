@@ -3,6 +3,7 @@ Install Filament:
 composer require filament/filament -W
 php artisan filament:install --panels
 php artisan make:filament-user
+php artisan make:filament-resource User --view
 =================================================
 
 Clear Cache Filament Components & Icons:

@@ -81,4 +81,11 @@ return [
     'latest_orders' => 'Latest Orders',
     'orders_status' => 'Orders Status',
     'orders_chart' => 'Orders Chart',
+    'attribute' => 'Attribute',
+    'attributes' => 'Attributes',
+    'attribute_value' => 'Attribute Value',
+    'attribute_values' => 'Attribute Values',
+    'value' => 'Value',
+    'item_attributes' => 'Item Attributes',
+    'add_attribute' => 'Add Attribute',
 ];
