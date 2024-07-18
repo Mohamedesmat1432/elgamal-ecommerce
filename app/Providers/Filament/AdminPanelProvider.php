@@ -33,7 +33,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->font('Inter', url: asset('css/site.css'), provider: LocalFontProvider::class)
+            ->font('Cairo', url: asset('css/site.css'), provider: LocalFontProvider::class)
             ->favicon(asset('images/logo-camel.png'))
             ->brandName(__('site.elgamal'))
             ->brandLogo(asset('images/brand-logo-camel-removebg-preview.png'))
