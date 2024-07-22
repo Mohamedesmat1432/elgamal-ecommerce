@@ -39,6 +39,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogo(asset('images/brand-logo-camel-removebg-preview.png'))
             ->brandLogoHeight('3rem')
             ->login()
+            ->profile(isSimple: false)
             ->colors([
                 'danger' => Color::Rose,
                 'gray' => Color::Gray,
@@ -93,6 +94,10 @@ class AdminPanelProvider extends PanelProvider
                         'sm' => 2,
                     ]),
             ])
+            ->databaseTransactions()
+            ->databaseNotifications()
+            ->databaseNotificationsPolling('30s')
+            ->unsavedChangesAlerts()
             ->sidebarCollapsibleOnDesktop()
             ->spa();
     }
