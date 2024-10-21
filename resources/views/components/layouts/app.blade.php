@@ -1,25 +1,30 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="{{ LaravelLocalization::getCurrentLocale() }}" dir="{{ LaravelLocalization::getCurrentLocaleDirection() }}">
 
-        <title>{{ $title ?? 'Page Title' }}</title>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <title>{{ $title ?? 'Page Title' }}</title>
 
-        @livewireStyles
-    </head>
-    <body class="bg-slate-200 dark:bg-slate-700">
+    <link rel="stylesheet" href="{{ asset('css/site.css') }}">
 
-        @livewire('partials.navbar')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        <main>{{ $slot }}</main>
+    @livewireStyles
+</head>
 
-        @livewire('partials.footer')
+<body class="bg-slate-200 dark:bg-slate-700">
 
-        @livewireScripts
+    <livewire:partials.navbar />
 
-        <x-livewire-alert::scripts />
-    </body>
+    <main>{{ $slot }}</main>
+
+    <livewire:partials.footer />
+
+    @livewireScripts
+
+    <x-livewire-alert::scripts />
+</body>
+
 </html>

@@ -15,7 +15,7 @@
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-gray-700 dark:text-white mb-1" for="first_name">
-                                    First Name
+                                    {{__('site.f_name')}}
                                 </label>
                                 <div class="relative">
                                     <input wire:model="f_name"
@@ -39,7 +39,7 @@
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-white mb-1" for="last_name">
-                                    Last Name
+                                    {{__('site.l_name')}}
                                 </label>
                                 <div class="relative">
                                     <input wire:model="l_name"
@@ -64,7 +64,7 @@
                         </div>
                         <div class="mt-4">
                             <label class="block text-gray-700 dark:text-white mb-1" for="phone">
-                                Phone
+                                {{__('site.phone')}}
                             </label>
                             <div class="relative">
                                 <input wire:model="phone"
@@ -88,7 +88,7 @@
                         </div>
                         <div class="mt-4">
                             <label class="block text-gray-700 dark:text-white mb-1" for="street">
-                                Street
+                                {{__('site.street')}}
                             </label>
                             <div class="relative">
                                 <input wire:model="street"
@@ -112,7 +112,7 @@
                         </div>
                         <div class="mt-4">
                             <label class="block text-gray-700 dark:text-white mb-1" for="city">
-                                City
+                                {{__('site.city')}}
                             </label>
                             <div class="relative">
                                 <input wire:model="city"
@@ -137,7 +137,7 @@
                         <div class="grid grid-cols-2 gap-4 mt-4">
                             <div>
                                 <label class="block text-gray-700 dark:text-white mb-1" for="country">
-                                    Country
+                                    {{__('site.country')}}
                                 </label>
                                 <div class="relative">
                                     <input wire:model="country"
@@ -161,7 +161,7 @@
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-white mb-1" for="zip_code">
-                                    ZIP Code
+                                    {{__('site.zip_code')}}
                                 </label>
                                 <div class="relative">
                                     <input wire:model="zip_code"
@@ -197,7 +197,7 @@
                                 for="cod">
                                 <div class="block">
                                     <div class="w-full text-lg font-semibold">
-                                        Cash on Delivery
+                                        {{__('site.cod')}}
                                     </div>
                                 </div>
                                 <svg aria-hidden="true" class="w-5 h-5 ms-3 rtl:rotate-180" fill="none"
@@ -216,7 +216,7 @@
                                 for="stripe">
                                 <div class="block">
                                     <div class="w-full text-lg font-semibold">
-                                        Stripe
+                                        {{__('site.stripe')}}
                                     </div>
                                 </div>
                                 <svg aria-hidden="true" class="w-5 h-5 ms-3 rtl:rotate-180" fill="none"
@@ -291,7 +291,7 @@
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0">
                                         <img alt="{{ $item['name'] }}" class="w-12 h-12 rounded-full"
-                                            src="{{ $item['image'] }}">
+                                            src="{{ url('storage', $item['image']) }}">
                                         </img>
                                     </div>
                                     <div class="flex-1 min-w-0 ms-4">
